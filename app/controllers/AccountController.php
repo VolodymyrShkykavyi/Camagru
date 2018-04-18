@@ -7,10 +7,10 @@ use app\core\Controller;
 class  AccountController extends Controller
 {
     public function loginAction(){
-        echo 'login action';
+        $this->view->render('Login');
     }
 
     public function registerAction(){
-        echo  'register action';
+        $this->view->render('Register account');
     }
 }
