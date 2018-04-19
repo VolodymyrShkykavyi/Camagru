@@ -2,7 +2,8 @@
 
 namespace app\core;
 
-class Router {
+class Router
+{
     protected $routes = [];
     protected $params = [];
 
@@ -18,19 +19,20 @@ class Router {
         $this->routes[$route] = $params;
     }
 
-    public function match(){
+    public function match()
+    {
         $url = trim($_SERVER['REQUEST_URI'], '/');
         foreach ($this->routes as $key => $value){
             if (preg_match($key, $url, $matches)){
                 $this->params = $value;
                 return (true);
-                // var_dump($matches);
             }
         }
         return (false);
     }
 
-    public function run(){
+    public function run()
+    {
         if ($this->match()){
             $path = 'app\controllers\\' . ucfirst($this->params['controller']) . 'Controller';
             if (class_exists($path)){
@@ -39,13 +41,13 @@ class Router {
                     $controller = new $path($this->params);
                     $controller->$action();
                 } else{
-                    echo 'no action: ' . $action;
+                    View::errorCode(404);
                 }
             } else{
-                echo 'Can\'t find: ' . $path;
+                View::errorCode(404);
             }
         } else{
-            echo '404';
+            View::errorCode(404);
         }
     }
 }

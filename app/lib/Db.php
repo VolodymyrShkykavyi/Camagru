@@ -1,0 +1,36 @@
+<?php
+
+namespace app\lib;
+
+use PDO;
+use PDOException;
+
+class Db
+{
+    protected $db;
+
+    public function __construct()
+    {
+        require_once (ROOT . '/config/database.php');
+        try {
+            $this->db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch(PDOException $err){
+            echo 'Can\'t connect to Database';
+            exit;
+        }
+    }
+
+    public function query($sql, $params = [])
+    {
+        $stmt = $this->db->prepare($sql);
+        if (!empty($params)){
+            foreach ($params as $key => $value){
+                $stmt->bindValue(':' . $key, $value);
+            }
+        }
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return($result);
+    }
+}

@@ -7,7 +7,11 @@ use app\core\Controller;
 class MainController extends Controller
 {
     public function indexAction(){
-        $this->view->render('Main page');
-        //echo 'index page';
+
+        $res = $this->model->getNews();
+        $ViewData = [
+            'users' => $res,
+        ];
+        $this->view->render('Main page', $ViewData);
     }
 }

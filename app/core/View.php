@@ -14,16 +14,32 @@ class View
         $this->path = $route['controller'] . '/' . $route['action'];
     }
 
-    public function render($title, $vars = [])
+    public function render($title, $ViewData = [])
     {
-        if (file_exists(ROOT . '/app/views/' . $this->path . '.php') &&
-            file_exists(ROOT . '/app/views/layouts/' . $this->layout . '.php')){
+        $pathView = ROOT . '/app/views/' . $this->path . '.php';
+        $pathLayout = ROOT . '/app/views/layouts/' . $this->layout . '.php';
+        if (file_exists($pathView) && file_exists($pathLayout)){
             ob_start();
-            require ROOT . '/app/views/' . $this->path . '.php';
+            require $pathView;
             $content = ob_get_clean();
-            require ROOT . '/app/views/layouts/' . $this->layout . '.php';
+            require $pathLayout;
         } else{
-            echo 'View not found' . $this->path;
+            View::errorCode(404);
         }
+    }
+
+    public function redirect($url)
+    {
+        header('Location: ' . $url);
+        exit;
+    }
+
+    public static function errorCode($code)
+    {
+        http_response_code($code);
+        if (file_exists(ROOT . '/app/views/errors/' . $code . '.php')) {
+            require ROOT . '/app/views/errors/' . $code . '.php';
+        }
+        exit;
     }
 }
