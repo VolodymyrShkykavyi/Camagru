@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title><?= $title; ?></title>
     <link rel="stylesheet" href="/public/css/bootstrap.min.css">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/public/css/default.css">
 </head>
 <body class="bg-light">
@@ -16,7 +16,7 @@
         <div id="wrapper" class="col-md-10">
 			<?php echo $content; ?>
         </div>
-        <div id="sidebar" class="col-md-2 bg-light">
+        <div id="sidebar" class="col-md-2 bg-light pt-2">
             <?php require_once (ROOT . '/app/views/layouts/sidebar.php');?>
         </div>
     </div>

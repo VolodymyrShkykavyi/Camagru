@@ -1,6 +1,7 @@
 #login-form{
     max-width: 300px;
-
+    margin-right: 60px;
+    float: right;
     display: inline-block;
     position: relative;
 }
@@ -36,4 +37,15 @@ header {
 .nav-link:hover{
     background-color: #007BFF;
     color: white;
+}
+
+.vertical-center{
+    display: flex;
+    min-height: 100%;
+    align-items: center;
+}
+
+.webcam{
+    max-width: 350px;
+    max-height: 350px;
 }
