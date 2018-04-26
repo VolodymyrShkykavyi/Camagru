@@ -9,7 +9,7 @@ abstract class  Controller
     public $route;
     public $view;
     public $model;
-
+	public $ViewData = array();
     public function __construct($route)
     {
         $this->route = $route;

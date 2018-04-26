@@ -1,1 +1,5 @@
 deny from all
+
+<Files 'setup.php'>
+    allow from all
+</Files>

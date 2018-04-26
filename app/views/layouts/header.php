@@ -16,22 +16,18 @@
                     <div class="form-group">
                         <input type="password" class="form-control" name="login_password" placeholder="Password" value="">
                     </div>
-                    <div class="form-group">
-                        <input type="checkbox" name="login_remember">
-                        <span>Remember me</span>
-                    </div>
                     <button type="submit" class="btn btn-primary" title="login">
                         <i class="fa fa-chevron-right text-dark"></i>
                     </button>
                     <div>
                         <a href="/">Lost password? </a>
-                        <a href="/account/register" style="float: right;">Register</a>
+                        <a href="/register" style="float: right;">Register</a>
                     </div>
                 </form>
                     <?php //$_SESSION['authorization']['login']='adm'; ?>
                     <?php else: ?>
                     <div class="col-md-3">
-                        Username: <?=$_SESSION['authorization']['login']; ?>
+                        Hello, <?=$_SESSION['authorization']['login']; ?>
                     </div>
                     <form action="/account/logout" method="post">
                         <button type="submit" id="btn_logout" class="btn btn-primary text-dark" title="logout">
@@ -43,7 +39,4 @@
             </div>
         </div>
     </div>
-    <nav>
-
-    </nav>
 </header>

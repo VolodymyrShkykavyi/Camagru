@@ -32,3 +32,8 @@
 header {
     padding: 20px 0;
 }
+
+.nav-link:hover{
+    background-color: #007BFF;
+    color: white;
+}
