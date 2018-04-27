@@ -93,7 +93,7 @@ class  AccountController extends Controller
 			];
 			$res = $this->model->registration($data);
 			if (!$res) {
-				$this->ViewData['errors'] = 'some error';
+				$this->ViewData['errors'] = 'model error';
 			} else {
 				$_POST['login_username'] = $_POST['register_login'];
 				$_POST['login_password'] = $_POST['register_password'];
@@ -136,4 +136,25 @@ class  AccountController extends Controller
 		$this->view->redirect('/');
 	}
 
+	public function registerValidateAction()
+	{
+		if (isset($_POST['login'])){
+			if ($this->model->validLoginEmail(['login' => $_POST['login']])){
+				echo 'OK';
+			}
+			else{
+				echo 'ERROR';
+			}
+			return;
+		}
+		elseif (isset($_POST['email'])){
+			if ($this->model->validLoginEmail(['email' => $_POST['email']])){
+				echo 'OK';
+			}
+			else{
+				echo 'ERROR';
+			}
+			return;
+		}
+	}
 }

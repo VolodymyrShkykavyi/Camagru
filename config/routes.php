@@ -36,6 +36,11 @@ return array(
 		'action' => 'verify'
 	],
 
+	'register/validate' => [
+		'controller' => 'account',
+		'action' => 'registerValidate'
+	],
+
 	'gallery' => [
 		'controller' => 'gallery',
 		'action' => 'index'

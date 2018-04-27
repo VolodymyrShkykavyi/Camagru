@@ -30,6 +30,10 @@
 
 }
 
+html, body{
+    min-height: 100%!important;
+}
+
 header {
     padding: 20px 0;
 }
@@ -48,4 +52,19 @@ header {
 .webcam{
     max-width: 350px;
     max-height: 350px;
+}
+
+.preloader{
+    height: 23px;
+    padding-left: 25px;
+    display: inline-block;
+    vertical-align: middle;
+    background-image: url('/public/img/preloader.gif');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+form .preloader{
+    margin-top: -5px;
+    margin-left: 5px;
 }

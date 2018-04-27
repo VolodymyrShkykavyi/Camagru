@@ -5,9 +5,9 @@ define('ROOT', $_SERVER['DOCUMENT_ROOT']);
 require_once ('../app/lib/Db.php');
 $db = new Db();
 
-if (!empty($db->query_fetched('SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = \'camagru\'')))
+if (empty($db->query_fetched('SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = \'camagru\'')))
 {
-	$db->query('CREATE DATABASE IF NOT EXISTS camagru');
+	$db->query('CREATE DATABASE camagru');
 
 	$db->query('CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

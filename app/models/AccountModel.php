@@ -9,7 +9,7 @@ class AccountModel extends Model
     public function authorization($login, $pswd)
     {
         $params = [
-            'login' => trim($login),
+            'login' => htmlspecialchars(trim($login)),
             'passw' => hash('whirlpool', $pswd),
         ];
         $res = $this->db->query_fetched('SELECT * FROM users WHERE `login` = :login AND `passw` = :passw', $params);
@@ -30,7 +30,10 @@ class AccountModel extends Model
 			!isset($arr['email']) || !preg_match($pattern_email, $arr['email'])){
 			return (false);
 		}
-		$arr['login'] = trim($arr['login']);
+		$arr['login'] = htmlspecialchars(trim($arr['login']));
+		if (empty($arr['login'])){
+			return (false);
+		}
 		$arr['password'] = hash('whirlpool', $arr['password']);
 		$params = [
 			'login' => $arr['login'],
@@ -50,7 +53,7 @@ class AccountModel extends Model
 	public function verify($login)
 	{
 		$params = [
-			'login' => $login
+			'login' => htmlspecialchars(trim($login))
 		];
 		$this->db->query('UPDATE `users` SET `verified` = 1 WHERE `login` = :login;', $params);
 	}
@@ -58,7 +61,7 @@ class AccountModel extends Model
 	public function isVerified($login)
 	{
 		$params = [
-			'login' => $login
+			'login' => htmlspecialchars(trim($login))
 		];
 		$res = $this->db->query_fetched('SELECT * FROM `users` WHERE `login` = :login;', $params);
 		if(!empty($res) && $res[0]['verified']){
@@ -70,11 +73,36 @@ class AccountModel extends Model
 	public function getUserEmail($login)
 	{
 		$params = [
-			'login' => $login
+			'login' => htmlspecialchars(trim($login))
 		];
 		$res = $this->db->query_fetched('SELECT * FROM `users` WHERE `login` = :login;', $params);
 		if (!empty($res)){
 			return ($res[0]['email']);
+		}
+		return (false);
+	}
+
+	public function validLoginEmail($arr)
+	{
+		if (isset($arr['login'])){
+			$params = [
+				'login' => htmlspecialchars(trim($arr['login']))
+			];
+			$res = $this->db->query_fetched('SELECT * FROM `users` WHERE `login` = :login', $params);
+			if (!empty($res)){
+				return (false);
+			}
+			return (true);
+		}
+		elseif (isset($arr['email'])){
+			$params = [
+				'email' => $arr['email']
+			];
+			$res = $this->db->query_fetched('SELECT * FROM `users` WHERE `email` = :email', $params);
+			if (!empty($res)){
+				return (false);
+			}
+			return (true);
 		}
 		return (false);
 	}
