@@ -45,7 +45,6 @@ header {
 
 .vertical-center{
     display: flex;
-    min-height: 100%;
     align-items: center;
 }
 
@@ -64,7 +63,41 @@ header {
     background-size: contain;
 }
 
+.overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left:auto;
+    margin-right:auto;
+    opacity: 0;
+    transition: .5s ease-in-out;
+    background-color: rgba(0,0,0,0.65);
+
+}
+
+.overlay:hover{
+    opacity: 1;
+}
+
+.btn-del-img{
+    right: 0.5rem;
+    top: 0.5rem;
+    z-index: 2;
+    position: absolute;
+}
+
 form .preloader{
     margin-top: -5px;
     margin-left: 5px;
+}
+
+span.input-group-text{
+    width: 40px;
 }

@@ -82,6 +82,18 @@ class AccountModel extends Model
 		return (false);
 	}
 
+	public function getUserId($login)
+	{
+		$params = [
+			'login' => htmlspecialchars(trim($login))
+		];
+		$res = $this->db->query_fetched('SELECT * FROM `users` WHERE `login` = :login;', $params);
+		if (!empty($res)){
+			return ($res[0]['id']);
+		}
+		return (false);
+	}
+
 	public function validLoginEmail($arr)
 	{
 		if (isset($arr['login'])){

@@ -2,7 +2,7 @@
 
 use app\core\Router;
 
-define('ROOT', __DIR__);
+define('ROOT', $_SERVER['DOCUMENT_ROOT']);
 
 ini_set('display_errors', 1);
 error_reporting(E_ALL);

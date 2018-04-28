@@ -2,6 +2,8 @@ var login_status = document.getElementById("login_status");
 var login_input = document.getElementById("login_input");
 var psw_status = document.getElementById("psw_status");
 var psw_input = document.getElementById("psw_input");
+var psw_confirm = document.getElementById("psw_input_confirm");
+var psw_confirm_status = document.getElementById("psw_status_confirm");
 var email_status = document.getElementById("email_status");
 var email_input = document.getElementById("email_input");
 var btn_submit = document.getElementById("btn_register");
@@ -17,12 +19,6 @@ function showElem(elem){
     }
     else if (elem.style.display === 'none'){
         elem.style.display = 'inline-block';
-    }
-}
-
-function hideElem(elem){
-    if (!elem.classList.contains('d-none')){
-        elem.classList.add('d-none');
     }
 }
 
@@ -120,6 +116,18 @@ email_input.addEventListener('blur', function () {
     }
 });
 
+function confirmPassword() {
+    if (psw_input.value === psw_confirm.value && psw_confirm.value){
+        changeElemStatus(psw_confirm_status, statusArr[0]);
+    }
+    else {
+        changeElemStatus(psw_confirm_status, statusArr[1]);
+        psw_confirm_status.innerText = ' Passwords don\'t match';
+    }
+}
+
+psw_confirm.addEventListener('keyup', confirmPassword);
+
 btn_submit.addEventListener('click', function (ev) {
     if (login_status.classList.contains('d-none')) {
         login_input.focus();
@@ -133,9 +141,13 @@ btn_submit.addEventListener('click', function (ev) {
         email_input.focus();
         email_input.blur();
     }
+    if (psw_confirm_status.classList.contains('d-none')){
+        confirmPassword();
+    }
     if (login_status.classList.contains(statusArr[0]) &&
         psw_status.classList.contains(statusArr[0]) &&
-        email_status.classList.contains(statusArr[0])){
+        email_status.classList.contains(statusArr[0]) &&
+        psw_confirm_status.classList.contains(statusArr[0])){
         return (true);
     }
     ev.preventDefault();

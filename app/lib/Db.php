@@ -2,6 +2,7 @@
 
 namespace app\lib;
 
+use app\core\View;
 use PDO;
 use PDOException;
 
@@ -17,6 +18,7 @@ class Db
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch(PDOException $err){
             echo 'Can\'t connect to Database';
+            View::errorCode(503);
             exit;
         }
     }
@@ -33,7 +35,15 @@ class Db
         	return (false);
 		}
         return ($stmt);
-    }
+	}
+
+	public function query_insert($sql, $params = [])
+	{
+		if (!$this->query($sql, $params)){
+			return (false);
+		}
+		return ($this->db->lastInsertId());
+	}
 
     public function query_fetched($sql, $params = []){
     	if (($stmt = $this->query($sql, $params))) {

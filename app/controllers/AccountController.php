@@ -66,6 +66,7 @@ class  AccountController extends Controller
         if (isset($_POST['login_username']) && isset($_POST['login_password'])) {
 			$res = $this->model->authorization($_POST['login_username'], $_POST['login_password']);
 			if (!empty($res)) {
+				$_SESSION['authorization']['id'] = $res['id'];
 				$_SESSION['authorization']['login'] = $res['login'];
 				$_SESSION['authorization']['token'] = AccountController::getUserToken($res['login']);
 				$_SESSION['authorization']['admin'] = $res['admin'];
@@ -78,6 +79,11 @@ class  AccountController extends Controller
         $this->view->redirect('/');
     }
 
+    public function settingsAction()
+	{
+		$this->view->render('Account settings');
+	}
+
     public function logoutAction(){
         $_SESSION['authorization'] = [];
         unset($_SESSION['authorization']);
@@ -85,6 +91,10 @@ class  AccountController extends Controller
     }
 
     public function registerAction(){
+		if (isset($_SESSION['authorization']) && !empty($_SESSION['authorization'])){
+			View::redirect('/');
+			return;
+		}
     	if (isset($_POST['register_login']) && isset($_POST['register_email']) && isset($_POST['register_password'])) {
 			$data = [
 				'login' => $_POST['register_login'],

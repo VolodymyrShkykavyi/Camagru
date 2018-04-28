@@ -31,6 +31,11 @@ return array(
         'action' => 'logout'
     ],
 
+	'account/settings' => [
+		'controller' => 'account',
+		'action' => 'settings'
+	],
+
 	'account/verify' => [
 		'controller' => 'account',
 		'action' => 'verify'
@@ -46,4 +51,23 @@ return array(
 		'action' => 'index'
 	],
 
+	'gallery/upload' => [
+		'controller' => 'gallery',
+		'action' => 'upload'
+	],
+
+	'gallery/montage' => [
+		'controller' => 'gallery',
+		'action' => 'montage'
+	],
+
+	'gallery/image' => [
+		'controller' => 'gallery',
+		'action' => 'image'
+	],
+
+	'gallery/delete' => [
+		'controller' => 'gallery',
+		'action' => 'delete'
+	],
 );
