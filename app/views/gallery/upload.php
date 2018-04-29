@@ -41,7 +41,7 @@ if (isset($ViewData) && isset($ViewData['errors'])) {
 	if (isset($ViewData) && isset($ViewData['userImg'])) {
 		foreach ($ViewData['userImg'] as $img) {
 			?>
-            <div class="col-lg-3 col-md-4 col-xs-6 mt-2 mb-2">
+            <div class="col-lg-4 col-md-4 col-xs-6 mt-2 mb-2 ">
                 <a href="/gallery/image?id=<?=$img['id']; ?>" class="d-block position-relative">
                     <div class="img-thumbnail">
                         <img src="<?= $img['src']; ?>" class=" img-fluid w-100"/>
@@ -61,3 +61,4 @@ if (isset($ViewData) && isset($ViewData['errors'])) {
 </div>
 
 <script src="/public/scripts/upload_img.js"></script>
+<script src="/public/scripts/deleteImage.js"></script>

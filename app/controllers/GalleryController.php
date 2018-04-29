@@ -26,7 +26,23 @@ class GalleryController extends Controller
 
 	public function indexAction()
 	{
-		$images = $this->model->getAllImages();
+		//TODO: pagination
+		$images = $this->model->getImages([
+			'start' => 0,
+			'offset' => 5
+		]);
+		$signed = AccountController::checkUserToken();
+			foreach ($images as &$img){
+				if ($signed) {
+					if (!empty($this->model->isImageLiked([
+						'userId' => $_SESSION['authorization']['id'],
+						'imageId' => $img['id']
+					]))) {
+						$img['liked'] = true;
+					}
+				}
+				$img['comments'] = $this->model->getComments($img['id'], 3);
+			}
 		$this->ViewData['images'] = $images;
 		$this->view->render('Gallery', $this->ViewData);
 	}
@@ -85,6 +101,9 @@ class GalleryController extends Controller
 		if (isset($_GET['id'])) {
 			$this->view->render('Gallery');
 		}
+		else{
+			View::redirect('/gallery');
+		}
 	}
 
 	public function deleteAction()
@@ -106,6 +125,45 @@ class GalleryController extends Controller
 		else{
 			echo "ERROR";
 		}
+	}
+
+	public function changeLikeAction()
+	{
+		if (!AccountController::checkUserToken() ||
+			!isset($_POST['imageId']) || !is_numeric($_POST['imageId'])){
+			echo "ERROR";
+			return;
+		}
+		$data = [
+			'userId' => $_SESSION['authorization']['id'],
+			'imageId' => $_POST['imageId']
+		];
+		if (isset($_POST['addLike'])){
+			$this->model->addLike($data);
+		}
+		elseif (isset($_POST['delLike'])){
+			$this->model->delLike($data);
+		}
+		else {
+			echo "ERROR";
+			return;
+		}
+		echo "OK";
+	}
+
+	public function commentAddAction()
+	{
+		if (AccountController::checkUserToken() &&
+			isset($_POST['comment']) && isset($_POST['imageId'])){
+			$id = $this->model->addComment([
+				'userId' => $_SESSION['authorization']['id'],
+				'imageId' => $_POST['imageId'],
+				'comment' => htmlspecialchars($_POST['comment'])
+			]);
+			echo ($id);
+			return;
+		}
+		echo "ERROR";
 	}
 
 }

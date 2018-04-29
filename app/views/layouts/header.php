@@ -29,10 +29,10 @@
                     </form>
 				<?php else: ?>
                     <div class="vertical-center mr-5">
-                        Hello, <?= $_SESSION['authorization']['login']; ?>
+                        Hello, <span id="user_login"><?= $_SESSION['authorization']['login']; ?></span>
                     </div>
                     <div class="mr-3">
-                        <a class="btn btn-primary rounded-circle h-100" title="Account settings" href="/account/settings">
+                        <a class="btn btn-primary rounded-circle " title="Account settings" href="/account/settings">
                             <i class="fa fa-cogs mt-2 text-dark"></i>
                         </a>
                     </div>

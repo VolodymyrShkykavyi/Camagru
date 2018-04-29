@@ -76,7 +76,12 @@ class  AccountController extends Controller
 				}
 			}
 		}
-        $this->view->redirect('/');
+		if (!empty($_SERVER['HTTP_REFERER'])){
+			$this->view->redirect($_SERVER['HTTP_REFERER']);
+		}
+		else {
+			$this->view->redirect('/');
+		}
     }
 
     public function settingsAction()

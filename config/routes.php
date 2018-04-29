@@ -48,7 +48,7 @@ return array(
 
 	'gallery' => [
 		'controller' => 'gallery',
-		'action' => 'index'
+		'action' => 'index',
 	],
 
 	'gallery/upload' => [
@@ -64,6 +64,16 @@ return array(
 	'gallery/image' => [
 		'controller' => 'gallery',
 		'action' => 'image'
+	],
+
+	'gallery/change/like' => [
+		'controller' => 'gallery',
+		'action' => 'changeLike'
+	],
+
+	'gallery/comment/add' => [
+		'controller' => 'gallery',
+		'action' => 'commentAdd'
 	],
 
 	'gallery/delete' => [

@@ -32,12 +32,12 @@ if (empty($db->query_fetched('SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMAT
 	`imageId` int NOT NULL
 );');
 
-	$db->query('CREATE TABLE IF NOT EXISTS `coments` (
+	$db->query('CREATE TABLE IF NOT EXISTS `comments` (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`userId` int NOT NULL,
 	`imageId` int NOT NULL,
 	`text` TEXT NOT NULL,
-	`date` TIMESTAMP NOT NULL,
+	`date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
 	PRIMARY KEY (`id`)
 );');
 
