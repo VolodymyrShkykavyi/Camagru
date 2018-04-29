@@ -61,7 +61,7 @@ return array(
 		'action' => 'montage'
 	],
 
-	'gallery/image' => [
+	'gallery/image/([0-9]+)' => [
 		'controller' => 'gallery',
 		'action' => 'image'
 	],

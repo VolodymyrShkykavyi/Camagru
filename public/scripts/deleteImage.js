@@ -4,7 +4,8 @@ function deleteImage(event) {
     event.preventDefault();
     if (confirm('Do you really want to delete this image?')) {
         var aTag = this.parentElement.parentElement;
-        var id = aTag.href.substr(aTag.href.indexOf('id=') + 3);
+        var path = '/gallery/image/';
+        var id = aTag.href.substr(aTag.href.indexOf(path) + path.length);
         if (!id) {
             return;
         }

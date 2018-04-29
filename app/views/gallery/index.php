@@ -14,7 +14,7 @@ if (isset($ViewData['images'])) {
 		?>
         <div class="row pb-3">
             <div class="col-sm-12 col-md-8 m-auto img-thumbnail p-1">
-                <a href="/gallery/image?id=<?= $img['id']; ?>" class="d-block position-relative">
+                <a href="/gallery/image/<?= $img['id']; ?>" class="d-block position-relative">
                     <div class="">
                         <img src="<?= $img['src']; ?>" class=" img-fluid w-100"/>
                     </div>

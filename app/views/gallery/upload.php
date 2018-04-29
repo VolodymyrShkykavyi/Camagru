@@ -42,7 +42,7 @@ if (isset($ViewData) && isset($ViewData['errors'])) {
 		foreach ($ViewData['userImg'] as $img) {
 			?>
             <div class="col-lg-4 col-md-4 col-xs-6 mt-2 mb-2 ">
-                <a href="/gallery/image?id=<?=$img['id']; ?>" class="d-block position-relative">
+                <a href="/gallery/image/<?=$img['id']; ?>" class="d-block position-relative">
                     <div class="img-thumbnail">
                         <img src="<?= $img['src']; ?>" class=" img-fluid w-100"/>
                     </div>

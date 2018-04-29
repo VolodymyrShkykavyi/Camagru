@@ -98,7 +98,7 @@ class GalleryController extends Controller
 
 	public function imageAction()
 	{
-		if (isset($_GET['id'])) {
+		if (!isset($_GET['id'])) {
 			$this->view->render('Gallery');
 		}
 		else{
