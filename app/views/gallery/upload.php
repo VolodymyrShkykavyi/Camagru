@@ -8,7 +8,7 @@ if (isset($ViewData) && isset($ViewData['errors'])) {
     <div class="m-auto">
         <form action="/gallery/upload" method="post" enctype="multipart/form-data">
             <div class="card">
-                <div class="card-header">Upload new photo</div>
+                <div class="card-header">Upload new photo to gallery</div>
                 <div class="card-body">
                     <p class="card-text text-danger d-none" id="error_msg">
                         Select image to upload

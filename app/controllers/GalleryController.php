@@ -4,9 +4,12 @@ namespace app\controllers;
 
 use app\core\Controller;
 use app\core\View;
+use app\lib\Pagination;
 
 class GalleryController extends Controller
 {
+	private $pagination;
+
 	private function saveImage($data)
 	{
 		if (AccountController::checkUserToken()) {
@@ -26,24 +29,33 @@ class GalleryController extends Controller
 
 	public function indexAction()
 	{
+		$this->pagination = new Pagination([
+			'itemsTotal' => $this->model->getImagesCount(),
+			'itemsPerPage' => 5
+		]);
+		if ($this->pagination->getRedirect()){
+			View::redirect(array_reverse($this->pagination->getPagination())[1]['href']);
+		}
+		var_dump($this->pagination->getPagination());
 		//TODO: pagination
 		$images = $this->model->getImages([
-			'start' => 0,
+			'start' => ($this->pagination->getCurrentPage() - 1) * 5,
 			'offset' => 5
 		]);
 		$signed = AccountController::checkUserToken();
-			foreach ($images as &$img){
-				if ($signed) {
-					if (!empty($this->model->isImageLiked([
-						'userId' => $_SESSION['authorization']['id'],
-						'imageId' => $img['id']
-					]))) {
-						$img['liked'] = true;
-					}
+		foreach ($images as &$img) {
+			if ($signed) {
+				if (!empty($this->model->isImageLiked([
+					'userId' => $_SESSION['authorization']['id'],
+					'imageId' => $img['id']
+				]))) {
+					$img['liked'] = true;
 				}
-				$img['comments'] = $this->model->getComments($img['id'], 3);
 			}
+			$img['comments'] = $this->model->getComments($img['id'], 3);
+		}
 		$this->ViewData['images'] = $images;
+		$this->ViewData['pagination'] = $this->pagination->getPagination();
 		$this->view->render('Gallery', $this->ViewData);
 	}
 
@@ -80,8 +92,7 @@ class GalleryController extends Controller
 			}
 			$this->ViewData['userImg'] = $this->model->getUserImagesAll($_SESSION['authorization']['id']);
 			$this->view->render('Upload photos', $this->ViewData);
-		}
-		else {
+		} else {
 			View::redirect('/');
 		}
 	}
@@ -90,8 +101,7 @@ class GalleryController extends Controller
 	{
 		if (AccountController::checkUserToken()) {
 			$this->view->render('Montage photo');
-		}
-		else {
+		} else {
 			View::redirect('/');
 		}
 	}
@@ -100,29 +110,26 @@ class GalleryController extends Controller
 	{
 		if (!isset($_GET['id'])) {
 			$this->view->render('Gallery');
-		}
-		else{
+		} else {
 			View::redirect('/gallery');
 		}
 	}
 
 	public function deleteAction()
 	{
-		if (!AccountController::checkUserToken() || !isset($_POST['delId'])){
+		if (!AccountController::checkUserToken() || !isset($_POST['delId'])) {
 			echo "ERROR";
 			return;
 		}
-		if ($src = $this->model->deleteImage(['imageId' => $_POST['delId'], 'userId' => $_SESSION['authorization']['id']])){
+		if ($src = $this->model->deleteImage(['imageId' => $_POST['delId'], 'userId' => $_SESSION['authorization']['id']])) {
 			$src = ROOT . $src;
-			try{
+			try {
 				unlink($src);
-			}
-			catch (\Exception $e){
+			} catch (\Exception $e) {
 				echo "ERROR";
 			}
 			echo "OK";
-		}
-		else{
+		} else {
 			echo "ERROR";
 		}
 	}
@@ -130,7 +137,7 @@ class GalleryController extends Controller
 	public function changeLikeAction()
 	{
 		if (!AccountController::checkUserToken() ||
-			!isset($_POST['imageId']) || !is_numeric($_POST['imageId'])){
+			!isset($_POST['imageId']) || !is_numeric($_POST['imageId'])) {
 			echo "ERROR";
 			return;
 		}
@@ -138,13 +145,11 @@ class GalleryController extends Controller
 			'userId' => $_SESSION['authorization']['id'],
 			'imageId' => $_POST['imageId']
 		];
-		if (isset($_POST['addLike'])){
+		if (isset($_POST['addLike'])) {
 			$this->model->addLike($data);
-		}
-		elseif (isset($_POST['delLike'])){
+		} elseif (isset($_POST['delLike'])) {
 			$this->model->delLike($data);
-		}
-		else {
+		} else {
 			echo "ERROR";
 			return;
 		}
@@ -154,13 +159,13 @@ class GalleryController extends Controller
 	public function commentAddAction()
 	{
 		if (AccountController::checkUserToken() &&
-			isset($_POST['comment']) && isset($_POST['imageId'])){
+			isset($_POST['comment']) && isset($_POST['imageId'])) {
 			$id = $this->model->addComment([
 				'userId' => $_SESSION['authorization']['id'],
 				'imageId' => $_POST['imageId'],
 				'comment' => htmlspecialchars($_POST['comment'])
 			]);
-			echo ($id);
+			echo($id);
 			return;
 		}
 		echo "ERROR";

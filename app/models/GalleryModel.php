@@ -27,6 +27,12 @@ class GalleryModel extends Model
 		return ($res);
 	}
 
+	public function getImagesCount()
+	{
+		$res = $this->db->query_fetched('SELECT COUNT(*) AS `count` FROM `gallery`;');
+		return($res[0]['count']);
+	}
+
 	public function saveImage($data)
 	{
 		if (empty($data) || !isset($data['userId']) || !isset($data['src'])){

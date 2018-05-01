@@ -51,6 +51,11 @@ return array(
 		'action' => 'index',
 	],
 
+	'gallery/page/([0-9]+)' => [
+		'controller' => 'gallery',
+		'action' => 'index',
+	],
+
 	'gallery/upload' => [
 		'controller' => 'gallery',
 		'action' => 'upload'
