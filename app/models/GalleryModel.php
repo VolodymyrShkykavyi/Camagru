@@ -33,6 +33,15 @@ class GalleryModel extends Model
 		return($res[0]['count']);
 	}
 
+	public function getUploadsCount($id)
+	{
+		if (!is_numeric($id) || $id <= 0){
+			return (array());
+		}
+		$res = $this->db->query_fetched('SELECT COUNT(*) AS `count` FROM `gallery` WHERE `userId` = :id;', ['id' => $id]);
+		return($res[0]['count']);
+	}
+
 	public function saveImage($data)
 	{
 		if (empty($data) || !isset($data['userId']) || !isset($data['src'])){
@@ -42,14 +51,22 @@ class GalleryModel extends Model
 		return ($id);
 	}
 
-	public function getUserImagesAll($id)
+	public function getUserImages($id, $limits)
 	{
 		if (!is_numeric($id) || $id <= 0){
 			return (array());
 		}
-		$res = $this->db->query_fetched('SELECT * FROM `gallery` WHERE `userId` = :id ORDER BY `date` DESC;', ['id' => $id]);
+		if (!isset($limits['start']) || !isset($limits['offset'])
+			|| !is_numeric($limits['start']) || !is_numeric($limits['offset']) ||
+			$limits['offset'] <= 0 || $limits['start'] < 0){
+			return (array());
+		}
+		$res = $this->db->query_fetched("SELECT * FROM `gallery` WHERE `userId` = :id ORDER BY `date` DESC 
+										LIMIT {$limits['start']}, {$limits['offset']};",
+			['id' => $id]);
 		return ($res);
 	}
+
 
 	public function getImage($id)
 	{

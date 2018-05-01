@@ -35,7 +35,7 @@ class Pagination
 		$this->setPagination($options);
 	}
 
-	private function addButton($pageNum, $isActive, $value = '')
+	private function addButton($pageNum, $isActive, $isAble = true, $value = '')
 	{
 		$btn = array();
 
@@ -43,7 +43,13 @@ class Pagination
 			$value = $pageNum;
 		}
 		$btn['active'] = $isActive;
-		$btn['href'] = $this->baseURI . $pageNum;
+		$btn['able'] = $isAble;
+		if ($pageNum){
+			$btn['href'] = $this->baseURI . $pageNum;
+		}
+		else {
+			$btn['href'] = '';
+		}
 		$btn['value'] = (string)$value;
 		return ($btn);
 	}
@@ -60,25 +66,29 @@ class Pagination
 		$this->currentPage = $options['currPage'];
 		$this->pagination[] = $this->addButton(
 			($options['currPage'] > 1) ? $options['currPage'] - 1 : 1,
+			false,
 			($options['currPage'] > 1),
 			'Prev'
 		);
-		$this->pagination[] = $this->addButton(1, ($options['currPage'] > 1));
+		$this->pagination[] = $this->addButton(1, ($options['currPage'] == 1),$options['currPage'] != 1 );
 		if ($options['currPage'] - 2 > 2){
-			$this->pagination[] = array();
+			$this->pagination[] = $this->addButton(false, false, false, '...');
 		}
-		for ($i = $options['currPage'] - 2;
-			 $i > 1 && ($i < $numPages) && ($i <= $options['currPage'] + 2);
-			 $i++){
-			$this->addButton($i, ($options['currPage'] == $i));
+		for ($i = $options['currPage'] - 2; $i < $numPages; $i++){
+			if ($i > 1 && $i <= $options['currPage'] + 2) {
+				$this->pagination[] = $this->addButton($i, ($options['currPage'] == $i), $options['currPage'] != $i);
+			}
 		}
-		if ($options['currPage'] + 2 < $numPages){
-			$this->pagination[] = array();
+		if ($options['currPage'] + 3 < $numPages){
+			$this->pagination[] = $this->addButton(false, false, false, '...');
 		}
-		$this->pagination[] = $this->addButton($numPages, ($options['currPage'] >= $numPages));
+		$this->pagination[] = $this->addButton($numPages,
+			$options['currPage'] >= $numPages,
+			$options['currPage'] < $numPages);
 		$this->pagination[] = $this->addButton(
 			($options['currPage'] < $numPages) ? $options['currPage'] + 1 : $numPages,
-			($options['currPage'] < $numPages),
+			false,
+			$options['currPage'] < $numPages,
 			'Next'
 		);
 	}

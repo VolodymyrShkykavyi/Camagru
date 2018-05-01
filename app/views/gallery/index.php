@@ -88,8 +88,8 @@ if (isset($ViewData['images'])) {
 
 		<?php
 	}
-}
-?>
+} ?>
+<?php include_once ('/app/views/templates/pagination.php'); ?>
 <script src="/public/scripts/likes.js"></script>
 <script src="/public/scripts/comment.js"></script>
 <script src="/public/scripts/deleteImage.js"></script>

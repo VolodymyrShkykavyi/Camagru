@@ -29,18 +29,20 @@ class GalleryController extends Controller
 
 	public function indexAction()
 	{
+		$itemsPerPage = 5;
+
 		$this->pagination = new Pagination([
 			'itemsTotal' => $this->model->getImagesCount(),
-			'itemsPerPage' => 5
+			'itemsPerPage' => $itemsPerPage
 		]);
+
+		//if request page number too big redirect to last page
 		if ($this->pagination->getRedirect()){
 			View::redirect(array_reverse($this->pagination->getPagination())[1]['href']);
 		}
-		var_dump($this->pagination->getPagination());
-		//TODO: pagination
 		$images = $this->model->getImages([
-			'start' => ($this->pagination->getCurrentPage() - 1) * 5,
-			'offset' => 5
+			'start' => ($this->pagination->getCurrentPage() - 1) * $itemsPerPage,
+			'offset' => $itemsPerPage
 		]);
 		$signed = AccountController::checkUserToken();
 		foreach ($images as &$img) {
@@ -61,6 +63,7 @@ class GalleryController extends Controller
 
 	public function uploadAction()
 	{
+		$itemsPerPage = 6;
 		if (AccountController::checkUserToken()) {
 			if (!empty($_FILES) && isset($_FILES['image']) && !empty($_FILES['image']['name'])) {
 				if (is_uploaded_file($_FILES['image']['tmp_name'])) {
@@ -90,7 +93,22 @@ class GalleryController extends Controller
 					unset($_FILES['image']);
 				}
 			}
-			$this->ViewData['userImg'] = $this->model->getUserImagesAll($_SESSION['authorization']['id']);
+			$this->pagination = new Pagination([
+				'itemsTotal' => $this->model->getUploadsCount($_SESSION['authorization']['id']),
+				'itemsPerPage' => $itemsPerPage
+			]);
+
+			//if request page number too big redirect to last page
+			if ($this->pagination->getRedirect()){
+				View::redirect(array_reverse($this->pagination->getPagination())[1]['href']);
+			}
+			$this->ViewData['pagination'] = $this->pagination->getPagination();
+			$this->ViewData['userImg'] = $this->model->getUserImages(
+				$_SESSION['authorization']['id'],
+				[
+					'start' => ($this->pagination->getCurrentPage() - 1) * $itemsPerPage,
+					'offset' => $itemsPerPage
+				]);
 			$this->view->render('Upload photos', $this->ViewData);
 		} else {
 			View::redirect('/');

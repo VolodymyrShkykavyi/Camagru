@@ -59,6 +59,6 @@ if (isset($ViewData) && isset($ViewData['errors'])) {
 	}
 	?>
 </div>
-
+<?php include_once ('/app/views/templates/pagination.php'); ?>
 <script src="/public/scripts/upload_img.js"></script>
 <script src="/public/scripts/deleteImage.js"></script>
