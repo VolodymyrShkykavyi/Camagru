@@ -9,7 +9,7 @@
 
 <?php
 //var_dump($ViewData['images'][0]);
-if (isset($ViewData['images'])) {
+if (isset($ViewData) && isset($ViewData['images'])) {
 	foreach ($ViewData['images'] as $img) {
 		?>
         <div class="row pb-3">
@@ -45,7 +45,8 @@ if (isset($ViewData['images'])) {
 							if (!isset($img['liked']) || !$img['liked']) {
 								echo "fa-heart-o";
 							} ?>"
-                               onclick="changeLike(this, <?= $img['id']; ?>);"></i></span>
+                               onclick="changeLike(this, <?= $img['id']; ?>);"></i>
+                        </span>
                     </div>
                     <hr class="gradient-line">
 
@@ -89,7 +90,8 @@ if (isset($ViewData['images'])) {
 		<?php
 	}
 } ?>
-<?php include_once ('/app/views/templates/pagination.php'); ?>
+<?php include_once('/app/views/templates/pagination.php'); ?>
+
 <script src="/public/scripts/likes.js"></script>
 <script src="/public/scripts/comment.js"></script>
 <script src="/public/scripts/deleteImage.js"></script>

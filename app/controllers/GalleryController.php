@@ -111,7 +111,7 @@ class GalleryController extends Controller
 				]);
 			$this->view->render('Upload photos', $this->ViewData);
 		} else {
-			View::redirect('/');
+			View::redirect('/gallery');
 		}
 	}
 
@@ -126,8 +126,18 @@ class GalleryController extends Controller
 
 	public function imageAction()
 	{
-		if (!isset($_GET['id'])) {
-			$this->view->render('Gallery');
+		if (isset($this->route['params'])) {
+			$this->ViewData['image'] = $this->model->getImage($this->route['params'][0]);
+			if (AccountController::checkUserToken()){
+				if (!empty($this->model->isImageLiked([
+					'userId' => $_SESSION['authorization']['id'],
+					'imageId' => $this->route['params'][0]
+				]))) {
+					$this->ViewData['image']['liked'] = true;
+				}
+			}
+			$this->ViewData['comments'] = $this->model->getCommentsAll($this->route['params'][0]);
+			$this->view->render('Gallery', $this->ViewData);
 		} else {
 			View::redirect('/gallery');
 		}
@@ -164,7 +174,9 @@ class GalleryController extends Controller
 			'imageId' => $_POST['imageId']
 		];
 		if (isset($_POST['addLike'])) {
-			$this->model->addLike($data);
+			if ($this->model->addLike($data)) {
+				//TODO: send email
+			}
 		} elseif (isset($_POST['delLike'])) {
 			$this->model->delLike($data);
 		} else {
@@ -183,6 +195,7 @@ class GalleryController extends Controller
 				'imageId' => $_POST['imageId'],
 				'comment' => htmlspecialchars($_POST['comment'])
 			]);
+			//TODO: send mail
 			echo($id);
 			return;
 		}

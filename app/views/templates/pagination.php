@@ -1,5 +1,5 @@
 <?php
-if (isset($ViewData['pagination'])): ?>
+if (isset($ViewData) && isset($ViewData['pagination'])): ?>
     <nav class="col-12">
         <ul class="pagination justify-content-center">
 			<?php foreach ($ViewData['pagination'] as $el) { ?>

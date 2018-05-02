@@ -27,6 +27,24 @@ class GalleryModel extends Model
 		return ($res);
 	}
 
+	public function getImage($id)
+	{
+		if (!is_numeric($id) || $id <= 0){
+			return (array());
+		}
+		$res = $this->db->query_fetched('SELECT * FROM `gallery` JOIN (
+				SELECT `id` AS `userId`, `login` AS `author` FROM `users`
+			) AS `t_users` ON `t_users`.`userId` = `gallery`.`userId`
+			LEFT JOIN (
+ 				SELECT `imageId`, COUNT(`imageId`) AS `likes_count` FROM `likes` WHERE `imageId` = :id
+ 			) AS `t_likes` ON `t_likes`.`imageId` = `gallery`.`id`
+ 			WHERE `id` = :id;', ['id' => $id]);
+		if (!empty($res)){
+			return ($res[0]);
+		}
+		return ($res);
+	}
+
 	public function getImagesCount()
 	{
 		$res = $this->db->query_fetched('SELECT COUNT(*) AS `count` FROM `gallery`;');
@@ -67,18 +85,6 @@ class GalleryModel extends Model
 		return ($res);
 	}
 
-
-	public function getImage($id)
-	{
-		if (!is_numeric($id) || $id <= 0){
-			return (array());
-		}
-		$res = $this->db->query_fetched('SELECT * FROM `gallery` WHERE `id` = :id;', ['id' => $id]);
-		if (!empty($res)){
-			return ($res[0]);
-		}
-		return ($res);
-	}
 
 	public function deleteImage($data)
 	{
@@ -152,8 +158,8 @@ class GalleryModel extends Model
 		}
 		$res = $this->db->query_fetched(
 			'SELECT * FROM `comments` JOIN (
-					SELECT `login`, `id` FROM `users`
-				  ) AS `t_user` ON `t_user`.`id` = `userId`
+					SELECT `login`, `id` AS `userId` FROM `users`
+				  ) AS `t_user` ON `t_user`.`userId` = `comments`.`userId`
 				   WHERE `imageId` = :id;',
 			['id' => $imageId]);
 		return ($res);

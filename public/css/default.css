@@ -34,6 +34,10 @@ html, body{
     min-height: 100%!important;
 }
 
+body > div.container{
+    min-height: 100%!important;
+}
+
 header {
     padding: 20px 0;
 }
@@ -112,6 +116,20 @@ header .rounded-circle{
 
 .decoration-none{
     text-decoration: none !important;
+}
+
+#image-main{
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 0;
+}
+
+#image-decoration{
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
 }
 
 hr.gradient-line {
