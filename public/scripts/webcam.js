@@ -18,7 +18,6 @@ if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             }
             isWebCam = true;
             webcam.play();
-
         })
         .catch(function () {
             document.getElementById('image-main-upload').style.display = 'block';
@@ -31,7 +30,7 @@ webcam.addEventListener('play', function () {
 
 //display first layer(camera/uploaded image)
 function drawMain(img, context){
-    if (img && img.src) {
+    if (img && (img.src || isWebCam)) {
         context.drawImage(img, 0, 0, canvas.width, canvas.height);
     }
     if (isWebCam){
