@@ -12,7 +12,22 @@
             <a class="nav-link" href="/gallery/upload">My uploads</a>
         </li>
 		<?php
-	}
-	?>
+	}?>
+    </ul>
+    <?php
+	//var_dump($ViewData);
 
-</ul>
+	if (isset($ViewData) && isset($ViewData['thumbnails'])) { ?>
+        <hr class="gradient-line mb-1">
+        <div class="row pl-2">
+            <div class="col-12 text-center mb-1">
+                <span class="text-info">Thumbnails</span>
+            </div>
+			<?php foreach ($ViewData['thumbnails'] as $img) { ?>
+                <div class="col-6 p-0 m-0 vertical-center">
+                    <img src="<?= $img['src']; ?>" class="img-fluid">
+                </div>
+			<?php } ?>
+        </div>
+	<?php } ?>
+

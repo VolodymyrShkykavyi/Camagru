@@ -118,7 +118,8 @@ class GalleryController extends Controller
 	public function montageAction()
 	{
 		if (AccountController::checkUserToken()) {
-			$this->view->render('Montage photo');
+			$this->ViewData['thumbnails'] = $this->model->getUserImagesAll($_SESSION['authorization']['id']);
+			$this->view->render('Montage photo', $this->ViewData);
 		} else {
 			View::redirect('/');
 		}

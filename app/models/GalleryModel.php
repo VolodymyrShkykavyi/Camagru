@@ -85,6 +85,16 @@ class GalleryModel extends Model
 		return ($res);
 	}
 
+	public function getUserImagesAll($id)
+	{
+		if (!is_numeric($id) || $id <= 0){
+			return (array());
+		}
+		$res = $this->db->query_fetched(
+			'SELECT * FROM `gallery` WHERE `userId` = :id ORDER BY `date` DESC;',
+			['id' => $id]);
+		return ($res);
+	}
 
 	public function deleteImage($data)
 	{
