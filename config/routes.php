@@ -90,4 +90,9 @@ return array(
 		'controller' => 'gallery',
 		'action' => 'delete'
 	],
+
+	'montage/upload' => [
+		'controller' => 'montage',
+		'action' => 'upload'
+	],
 );

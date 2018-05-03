@@ -14,14 +14,16 @@ btnBrowse.addEventListener('change', function () {
     }
 });
 
-document.getElementById('btn_upload').addEventListener('click', function (ev) {
-    if (!filename.value) {
-        ev.preventDefault();
-        errMsg.classList.remove('d-none');
-    }
-    else {
-        if (!errMsg.classList.contains('d-none')) {
-            errMsg.classList.add('d-none');
+if (document.getElementById('btn_upload')) {
+    document.getElementById('btn_upload').addEventListener('click', function (ev) {
+        if (!filename.value) {
+            ev.preventDefault();
+            errMsg.classList.remove('d-none');
         }
-    }
-});
+        else {
+            if (!errMsg.classList.contains('d-none')) {
+                errMsg.classList.add('d-none');
+            }
+        }
+    });
+}

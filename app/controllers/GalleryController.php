@@ -119,6 +119,11 @@ class GalleryController extends Controller
 	{
 		if (AccountController::checkUserToken()) {
 			$this->ViewData['thumbnails'] = $this->model->getUserImagesAll($_SESSION['authorization']['id']);
+			$decorations = glob('public/gallery/decorations/*.{png,jpeg,jpg}', GLOB_BRACE);
+			foreach ($decorations as &$value){
+				$value = '/' . $value;
+			}
+			$this->ViewData['decorations'] = $decorations;
 			$this->view->render('Montage photo', $this->ViewData);
 		} else {
 			View::redirect('/');

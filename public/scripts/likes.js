@@ -19,10 +19,11 @@ function changeLike(el, id) {
     data.append('imageId', id);
     xhr.open('POST', '/gallery/change/like', true);
     xhr.onreadystatechange = function(){
+        var localType = type;
         if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200){
           if (this.response == "OK"){
               var numLikes = el.previousElementSibling;
-              numLikes.innerHTML = (parseInt(numLikes.innerHTML) + type).toString();
+              numLikes.innerHTML = (parseInt(numLikes.innerHTML) + localType).toString();
               el.classList.toggle("fa-heart-o");
           }
       }

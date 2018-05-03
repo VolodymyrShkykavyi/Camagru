@@ -11,7 +11,7 @@
                                 <?= $ViewData['image']['author']; ?>
                             </a>
                         </span>
-                <span class="float-right position-relative">
+                <span class="float-right position-relative pb-1">
                             <span class="mr-4 pr-2">
                                 <?= ($ViewData['image']['likes_count']) ? $ViewData['image']['likes_count'] : 0; ?>
                             </span>
@@ -22,7 +22,7 @@
                                onclick="changeLike(this, <?= $ViewData['image']['id']; ?>);"></i>
                         </span>
             </div>
-            <div class="bg-light">
+            <div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item  pl-0">
                         <span class="">Uploaded:</span>

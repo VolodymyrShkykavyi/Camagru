@@ -132,6 +132,14 @@ header .rounded-circle{
     z-index: 1;
 }
 
+#image-main-upload{
+    /*position: absolute;*/
+    /*left: 0;*/
+    /*top: 0;*/
+    /*z-index: 2;*/
+    display: none;
+}
+
 hr.gradient-line {
     border: 0;
     height: 1px;
