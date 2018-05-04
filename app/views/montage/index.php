@@ -5,7 +5,7 @@
     </div>
 </div>
 <div class="row mb-4">
-    <div class="col-md-6 col-lg-6 col-sm-12">
+    <div class="col-md-6 col-lg-6 col-sm-12 mb-sm-3">
         <div>
             <div id="image-main-upload" class="h-100 w-100 small">
                 <form action="/gallery/upload" method="post" enctype="multipart/form-data">
@@ -23,9 +23,6 @@
                                     <input type="file" name="image" accept="image/png, image/gif, image/jpeg, image/jpg"
                                            class="d-none">
                                 </div>
-                                <button type="button" id="btn_load" class="btn btn-labeled btn-primary shadow-none">
-                                    <span class="btn-label"><i class="fa fa-image mr-1"></i>Load</span>
-                                </button>
                             </div>
 
                         </div>
@@ -34,7 +31,7 @@
             </div>
             <div id="image-preview" class="position-relative">
                 <video id="video" class="webcam" autoplay muted hidden></video>
-                <canvas id="image-main" class="bg-light w-100"></canvas>
+                <canvas id="image-main" class="w-100"></canvas>
                 <canvas id="image-decoration" class="w-100"></canvas>
             </div>
             <button class="btn btn-danger w-100 shadow-none" id="btn_photo">Select one effect</button>
@@ -44,7 +41,7 @@
             </button>
         </div>
     </div>
-    <div class="col-md-6 col-lg-6 col-sm-12">
+    <div class="col-md-6 col-lg-6 col-sm-12 mt-sm-2">
         <div class="w-100">
             <form id="decoration-settings">
                 <div class="w-100 mb-2">

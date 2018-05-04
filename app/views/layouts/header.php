@@ -23,13 +23,13 @@
                             <i class="fa fa-chevron-right text-dark"></i>
                         </button>
                         <div class="small">
-                            <a href="/">Lost password? </a>
+                            <a href="/">Lost password? </a><!--TODO: reinitialization mail-->
                             <a href="/register" style="float: right;">Register</a>
                         </div>
                     </form>
 				<?php else: ?>
                     <div class="vertical-center mr-5">
-                        Hello, <span id="user_login"><?= $_SESSION['authorization']['login']; ?></span>
+                        Hello, <span id="user_login" class="ml-2"><?= $_SESSION['authorization']['login']; ?></span>
                     </div>
                     <div class="mr-3">
                         <a class="btn btn-primary rounded-circle " title="Account settings" href="/account/settings">
@@ -43,7 +43,6 @@
                             </button>
                         </form>
                     </div>
-					<?php //unset($_SESSION['authorization']);?>
 				<?php endif; ?>
             </div>
         </div>

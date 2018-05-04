@@ -9,24 +9,7 @@ use app\lib\Pagination;
 class GalleryController extends Controller
 {
 	private $pagination;
-
-	private function saveImage($data)
-	{
-		if (AccountController::checkUserToken()) {
-			$path = $_SERVER['DOCUMENT_ROOT'] . '/public/gallery/' . time() . $_SESSION['authorization']['login'] . '.jpg';
-			if (file_exists($path) || empty($data)) {
-				return (false);
-			}
-			$img = str_replace('data:image/png;base64,', '', $data);
-			$img = base64_decode($img);
-			file_put_contents($path, $img);
-			if (file_exists($path)) {
-				return (true);
-			}
-		}
-		return (false);
-	}
-
+	
 	public function indexAction()
 	{
 		$itemsPerPage = 5;
@@ -112,21 +95,6 @@ class GalleryController extends Controller
 			$this->view->render('Upload photos', $this->ViewData);
 		} else {
 			View::redirect('/gallery');
-		}
-	}
-
-	public function montageAction()
-	{
-		if (AccountController::checkUserToken()) {
-			$this->ViewData['thumbnails'] = $this->model->getUserImagesAll($_SESSION['authorization']['id']);
-			$decorations = glob('public/gallery/decorations/*.{png,jpeg,jpg}', GLOB_BRACE);
-			foreach ($decorations as &$value){
-				$value = '/' . $value;
-			}
-			$this->ViewData['decorations'] = $decorations;
-			$this->view->render('Montage photo', $this->ViewData);
-		} else {
-			View::redirect('/');
 		}
 	}
 

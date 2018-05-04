@@ -5,6 +5,9 @@ var canvas_context = canvas.getContext('2d');
 var decoration_context = decoration.getContext('2d');
 var decoration_settings = document.getElementById('decoration-settings');
 var isWebCam = false;
+var btnBrowse = document.getElementById("btn_browse");
+var originalUpload = btnBrowse.children[1];
+var btnPhoto = document.getElementById("btn_photo");
 
 // check available of camera and get access to it
 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -29,19 +32,38 @@ webcam.addEventListener('play', function () {
 }, false);
 
 //display first layer(camera/uploaded image)
-function drawMain(img, context){
+function drawMain(img, context) {
     if (img && (img.src || isWebCam)) {
         context.drawImage(img, 0, 0, canvas.width, canvas.height);
     }
-    if (isWebCam){
+    if (isWebCam) {
         setTimeout(drawMain, 10, img, context);
     }
 }
 
-function drawDecoration(elem){
+function blockUploadBtn() {
+    if (btnPhoto.classList.contains('btn-success')) {
+        btnPhoto.classList.add('btn-danger');
+        btnPhoto.classList.remove('btn-success');
+        btnPhoto.innerText = 'Select one effect';
+
+        document.getElementById('btn_photo').removeEventListener('click', uploadImage);
+    }
+}
+
+function unblockUploadBtn() {
+    if (btnPhoto.classList.contains('btn-danger')) {
+        btnPhoto.classList.remove('btn-danger');
+        btnPhoto.classList.add('btn-success');
+        btnPhoto.innerText = 'Make Photo!';
+
+        document.getElementById("btn_photo").addEventListener("click", uploadImage);
+    }
+}
+
+function drawDecoration(elem) {
     decoration_context.clearRect(0, 0, decoration.width, decoration.height);
     var img = elem.getElementsByTagName('img')[0];
-    var btnPhoto = document.getElementById("btn_photo");
 
     if (img && img.src) {
         var offsetX = decoration_settings.setOX.value;
@@ -53,28 +75,17 @@ function drawDecoration(elem){
             decoration.width * scaleWidth, decoration.height * scaleHeight);
 
         //unblock button for uploading image on server
-        if (btnPhoto.classList.contains('btn-danger') && !isCanvasBlank(canvas)) {
-            btnPhoto.classList.remove('btn-danger');
-            btnPhoto.classList.add('btn-success');
-            btnPhoto.innerText = 'Make Photo!';
-
-            document.getElementById("btn_photo").addEventListener("click", uploadImage);
+        if (!isCanvasBlank(canvas)) {
+            unblockUploadBtn();
         }
     }
     else {
-        //block button for uploading image on server
-        if (btnPhoto.classList.contains('btn-success')){
-            btnPhoto.classList.add('btn-danger');
-            btnPhoto.classList.remove('btn-success');
-            btnPhoto.innerText = 'Select one effect';
-
-            document.getElementById('btn_photo').removeEventListener('click', uploadImage);
-        }
+        blockUploadBtn();
     }
 }
 
 //change size of both layers(webcam and decoration)
-function changeSize(){
+function changeSize() {
     var divContainer = document.getElementById('image-preview');
     canvas.height = canvas.offsetWidth * 0.75;
     canvas.width = canvas.offsetWidth;
@@ -86,7 +97,7 @@ function changeSize(){
 //if any decoration settings change - redraw decoration layer
 function changeSettings() {
     var allDecorations = Array.from(document.getElementById('decoration').getElementsByClassName('decoration-thumbnail'));
-    for(var el in allDecorations) {
+    for (var el in allDecorations) {
         if ((allDecorations[el].getElementsByTagName('input'))[0].checked) {
             drawDecoration(allDecorations[el]);
         }
@@ -94,7 +105,7 @@ function changeSettings() {
 }
 
 function resetSettings() {
-    var event = new Event('input', {bubbles:true});
+    var event = new Event('input', {bubbles: true});
     decoration_settings.reset();
     decoration_settings.setWidth.dispatchEvent(event);
     decoration_settings.setHeight.dispatchEvent(event);
@@ -103,8 +114,8 @@ function resetSettings() {
 }
 
 //upload image on server
-function uploadImage(){
-    if (isCanvasBlank(canvas) || isCanvasBlank(decoration)){
+function uploadImage() {
+    if (isCanvasBlank(canvas) || isCanvasBlank(decoration)) {
         return;
     }
     var xhr = new XMLHttpRequest();
@@ -115,19 +126,40 @@ function uploadImage(){
     data.append('layer1', canvas.toDataURL("image/png"));
     data.append('layer2', decoration.toDataURL("image/png"));
     xhr.open('POST', '/montage/upload', true);
-    xhr.onreadystatechange = function(){
-        if (xhr.readyState = XMLHttpRequest.LOADING){
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState = XMLHttpRequest.LOADING) {
             btnLoader.style.display = 'block';
             btnSubmit.style.display = 'none';
         }
-        if (xhr.readyState == XMLHttpRequest.DONE){
-          btnLoader.style.display = 'none';
-          btnSubmit.style.display = 'block';
-          if (xhr.status == 200 && this.response && this.response != 'ERROR'){
-              //TODO: show btn, add img
-              console.log(this.response);
-          }
-      }
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            btnLoader.style.display = 'none';
+            btnSubmit.style.display = 'block';
+            if (xhr.status == 200 && this.response && this.response != 'ERROR') {
+                //TODO: show btn, add img
+                decoration_context.clearRect(0, 0, decoration.width, decoration.height);
+                if (!isWebCam){
+                    canvas_context.clearRect(0, 0, canvas.width, canvas.height);
+                }
+                blockUploadBtn();
+                originalUpload.value = '';
+                document.getElementById('filename').value = '';
+
+                //add thumbnail to sidebar
+                let sidebarThumbnail = document.getElementById('sidebar-thumbnails');
+                if (sidebarThumbnail){
+                    let response = JSON.parse(this.response);
+                    let img = document.createElement('div');
+                    img.classList.add('col-6', 'p-0', 'm-0', 'vertical-center');
+                    img.innerHTML = '<a href="/gallery/image/'+ response.id +'" class="d-block position-relative">' +
+                        '<img src="' + response.src + '" class="img-fluid"><div class="overlay">' +
+                        '<button type="button" onclick="deleteImage(event, this);" class="btn btn-danger rounded-circle btn-del-img-sidebar shadow-none btn-sm">' +
+                        '<i class="fa fa-trash fa-sm text-light"></i></button>' +
+                        '<i class="fa fa-comments fa-lg text-light"></i></div></a>';
+                    sidebarThumbnail.insertBefore(img, sidebarThumbnail.firstElementChild);
+
+                }
+            }
+        }
     };
 
     xhr.send(data);
@@ -140,7 +172,6 @@ function isCanvasBlank(canvas) {
 
     return canvas.toDataURL() == blank.toDataURL();
 }
-
 
 
 decoration_settings.setWidth.addEventListener('input', function () {
@@ -161,25 +192,20 @@ decoration_settings.setOY.addEventListener('input', changeSettings);
 document.addEventListener('DOMContentLoaded', changeSize);
 window.addEventListener("resize", changeSize);
 
-if (document.getElementById('btn_load')){
-    var btnBrowse = document.getElementById("btn_browse");
-    var originalUpload = btnBrowse.children[1];
+btnBrowse.addEventListener('change', function () {
+    if (originalUpload.files && originalUpload.files[0]) {
+        var reader = new FileReader();
+        var img = new Image();
 
-    document.getElementById('btn_load').addEventListener('click', function () {
-        if (originalUpload.files && originalUpload.files[0]){
-            var reader = new FileReader();
-            var img = new Image();
+        reader.readAsDataURL(originalUpload.files[0]);
+        reader.onload = function (e) {
+            img.src = e.target.result;
+            img.width = canvas.width;
+            img.height = canvas.height;
+            img.onload = function () {
+                drawMain(img, canvas_context);
+            }
+        };
+    }
+});
 
-            reader.readAsDataURL(originalUpload.files[0]);
-            reader.onload = function (e) {
-                img.src = e.target.result;
-                img.width = canvas.width;
-                img.height = canvas.height;
-                img.onload = function() {
-                    drawMain(img, canvas_context);
-                }
-            };
-
-        }
-    });
-}

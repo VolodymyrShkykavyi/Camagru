@@ -102,6 +102,13 @@ header .rounded-circle{
     position: absolute;
 }
 
+.btn-del-img-sidebar{
+    z-index: 2;
+    position: absolute;
+    right: 0.1rem;
+    top: 0.1rem;
+}
+
 .like{
     font-size: 1.5rem;
     cursor: pointer;
@@ -118,6 +125,13 @@ header .rounded-circle{
     text-decoration: none !important;
 }
 
+.decoration-thumbnail img:hover{
+    border-color: red;
+    cursor: pointer;
+}
+
+
+
 #image-main{
     position: absolute;
     left: 0;
@@ -133,11 +147,13 @@ header .rounded-circle{
 }
 
 #image-main-upload{
-    /*position: absolute;*/
-    /*left: 0;*/
-    /*top: 0;*/
-    /*z-index: 2;*/
     display: none;
+}
+
+#image-preview{
+    background-image: url("/public/img/no-photo.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
 }
 
 hr.gradient-line {

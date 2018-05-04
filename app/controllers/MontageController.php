@@ -16,6 +16,22 @@ class MontageController extends Controller
 		}
 	}
 
+	public function indexAction()
+	{
+		if (AccountController::checkUserToken()) {
+			$this->model = $this->loadModel('Gallery');
+			$this->ViewData['thumbnails'] = $this->model->getUserImagesAll($_SESSION['authorization']['id']);
+			$decorations = glob('public/gallery/decorations/*.{png,jpeg,jpg}', GLOB_BRACE);
+			foreach ($decorations as &$value){
+				$value = '/' . $value;
+			}
+			$this->ViewData['decorations'] = $decorations;
+			$this->view->render('Montage photo', $this->ViewData);
+		} else {
+			View::redirect('/');
+		}
+	}
+
 	/**
 	 * function get data in base64 string for two layers
 	 */
@@ -53,7 +69,7 @@ class MontageController extends Controller
 				unlink(ROOT . $path);
 				echo 'ERROR';
 			}
-			echo $id;
+			echo json_encode(['id' => $id, 'src' => $path], JSON_UNESCAPED_SLASHES);
 		}
 		else{
 			echo 'ERROR';

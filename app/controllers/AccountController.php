@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\core\Controller;
 use app\core\View;
+use app\lib\Mail;
 
 class  AccountController extends Controller
 {
@@ -14,56 +15,30 @@ class  AccountController extends Controller
 
 	public static function checkUserToken()
 	{
-		if (isset($_SESSION['authorization']) && isset($_SESSION['authorization']['token'])){
-			if ($_SESSION['authorization']['token'] == AccountController::getUserToken($_SESSION['authorization']['login'])){
+		if (isset($_SESSION['authorization']) && isset($_SESSION['authorization']['token'])) {
+			if ($_SESSION['authorization']['token'] == AccountController::getUserToken($_SESSION['authorization']['login'])) {
 				return (true);
 			}
 		}
 		return (false);
 	}
 
-	public static function sendMail($email, $subject, $message)
-	{
-		if (empty($email) || empty($subject) || empty($message)){
-			return;
-		}
-
-		$encoding = "utf-8";
-
-		// Set preferences for Subject field
-		$subject_preferences = array(
-			"input-charset" => $encoding,
-			"output-charset" => $encoding,
-			"line-length" => 76,
-			"line-break-chars" => "\r\n"
-		);
-
-		$config = require ROOT . '/config/email.php';
-		// Set mail header
-		$header = "Content-type: text/html; charset=".$encoding." \r\n";
-		$header .= "From: " . $config['from_name'] . " <" . $config['from_email'] ."> \r\n";
-		$header .= "MIME-Version: 1.0 \r\n";
-		$header .= "Content-Transfer-Encoding: 8bit \r\n";
-		$header .= "Date: ".date("r (T)")." \r\n";
-		$header .= iconv_mime_encode("Subject", $subject, $subject_preferences);
-
-		// Send mail
-		mail($email, $subject, $message, $header);
-	}
 
 	private function sendVerifyMail($login)
 	{
-		if (!empty($login)){
+		if (!empty($login)) {
 			$email = $this->model->getUserEmail($login);
-			$text = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . '/account/verify?login=' .
+			$text = 'Follow this link:' . $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . '/account/verify?login=' .
 				urlencode($login) . '&token=' .
-				urlencode(hash('md5', $login . date('Y-m-d')));
-			AccountController::sendMail($email, 'account verification', $text);
+				urlencode(hash('md5', $login . date('Y-m-d'))) .
+				"<br> Good luck!";
+			Mail::sendMail($email, 'account verification', $text);
 		}
 	}
 
-    public function loginAction(){
-        if (isset($_POST['login_username']) && isset($_POST['login_password'])) {
+	public function loginAction()
+	{
+		if (isset($_POST['login_username']) && isset($_POST['login_password'])) {
 			$res = $this->model->authorization($_POST['login_username'], $_POST['login_password']);
 			if (!empty($res)) {
 				$_SESSION['authorization']['id'] = $res['id'];
@@ -71,36 +46,37 @@ class  AccountController extends Controller
 				$_SESSION['authorization']['token'] = AccountController::getUserToken($res['login']);
 				$_SESSION['authorization']['admin'] = $res['admin'];
 				$_SESSION['authorization']['verified'] = $res['verified'];
-				if (!$res['verified']){
+				if (!$res['verified']) {
 					$this->view->redirect('/account/verify');
 				}
 			}
 		}
-		if (!empty($_SERVER['HTTP_REFERER'])){
+		if (!empty($_SERVER['HTTP_REFERER'])) {
 			$this->view->redirect($_SERVER['HTTP_REFERER']);
-		}
-		else {
+		} else {
 			$this->view->redirect('/');
 		}
-    }
+	}
 
-    public function settingsAction()
+	public function settingsAction()
 	{
 		$this->view->render('Account settings');
 	}
 
-    public function logoutAction(){
-        $_SESSION['authorization'] = [];
-        unset($_SESSION['authorization']);
-        $this->view->redirect('/');
-    }
+	public function logoutAction()
+	{
+		$_SESSION['authorization'] = [];
+		unset($_SESSION['authorization']);
+		$this->view->redirect('/');
+	}
 
-    public function registerAction(){
-		if (isset($_SESSION['authorization']) && !empty($_SESSION['authorization'])){
+	public function registerAction()
+	{
+		if (isset($_SESSION['authorization']) && !empty($_SESSION['authorization'])) {
 			View::redirect('/');
 			return;
 		}
-    	if (isset($_POST['register_login']) && isset($_POST['register_email']) && isset($_POST['register_password'])) {
+		if (isset($_POST['register_login']) && isset($_POST['register_email']) && isset($_POST['register_password'])) {
 			$data = [
 				'login' => $_POST['register_login'],
 				'email' => strtolower($_POST['register_email']),
@@ -117,31 +93,28 @@ class  AccountController extends Controller
 				return;
 			}
 		}
-        $this->view->render('Register account', $this->ViewData);
-    }
+		$this->view->render('Register account', $this->ViewData);
+	}
 
-	public  function verifyAction()
+	public function verifyAction()
 	{
-		if (isset($_POST['send_mail'])){
+		if (isset($_POST['send_mail'])) {
 			if (isset($_SESSION['authorization']) && isset($_SESSION['authorization']['login'])) {
 				$this->sendVerifyMail($_SESSION['authorization']['login']);
-				var_dump($_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . '/account/verify?login=' .
-					urlencode($_SESSION['authorization']['login']) . '&token=' .
-					urlencode(hash('md5', $_SESSION['authorization']['login'] . date('Y-m-d'))));
 			}
 			unset($_POST['sent_mail']);
 		}
-		if (isset($_GET['login']) && isset($_GET['token'])){
+		if (isset($_GET['login']) && isset($_GET['token'])) {
 			$token_check = hash('md5', urldecode($_GET['login']) . date('Y-m-d'));
-			if ($token_check == urldecode($_GET['token'])){
+			if ($token_check == urldecode($_GET['token'])) {
 				$this->model->verify(urldecode($_GET['login']));
-				if (isset($_SESSION['authorization']) && !empty($_SESSION['authorization'])){
+				if (isset($_SESSION['authorization']) && !empty($_SESSION['authorization'])) {
 					$_SESSION['authorization']['verified'] = 1;
 				}
 			}
 		}
 		if (isset($_SESSION['authorization']) && !$_SESSION['authorization']['verified']) {
-			if ($this->model->isVerified($_SESSION['authorization']['login'])){
+			if ($this->model->isVerified($_SESSION['authorization']['login'])) {
 				$_SESSION['authorization']['verified'] = 1;
 			} else {
 				$this->view->render('Verify account', $this->ViewData);
@@ -153,23 +126,63 @@ class  AccountController extends Controller
 
 	public function registerValidateAction()
 	{
-		if (isset($_POST['login'])){
-			if ($this->model->validLoginEmail(['login' => $_POST['login']])){
+		if (isset($_POST['login'])) {
+			if ($this->model->validLoginEmail(['login' => $_POST['login']])) {
 				echo 'OK';
+			} else {
+				echo 'ERROR';
 			}
-			else{
+			return;
+		} elseif (isset($_POST['email'])) {
+			if ($this->model->validLoginEmail(['email' => $_POST['email']])) {
+				echo 'OK';
+			} else {
 				echo 'ERROR';
 			}
 			return;
 		}
-		elseif (isset($_POST['email'])){
-			if ($this->model->validLoginEmail(['email' => $_POST['email']])){
-				echo 'OK';
+	}
+
+	public function modifyAction()
+	{
+		if (AccountController::checkUserToken()) {
+			if (isset($_POST['action'])) {
+				if ($_POST['action'] == 'changeLogin') {
+					if (isset($_POST['newLogin']) && isset($_POST['password'])) {
+						$_POST['login'] = $_SESSION['authorization']['login'];
+						if ($this->model->updateLogin($_POST)) {
+							$_SESSION['authorization']['login'] = htmlspecialchars(trim($_POST['newLogin']));
+							$_SESSION['authorization']['token'] = AccountController::getUserToken($_SESSION['authorization']['login']);
+							echo 'OK';
+							return;
+						}
+					}
+				} elseif ($_POST['action'] == 'changeEmail') {
+					if (isset($_POST['newEmail']) && isset($_POST['password'])) {
+						$_POST['login'] = $_SESSION['authorization']['login'];
+						if ($this->model->updateEmail($_POST)) {
+							echo 'OK';
+							return;
+						}
+					}
+				} elseif ($_POST['action'] == 'changePassword') {
+					if (isset($_POST['currentPassword']) && isset($_POST['newPassword']) &&
+						isset($_POST['confirmPassword'])) {
+						if ($_POST['newPassword'] == $_POST['confirmPassword'] &&
+							strlen($_POST['newPassword']) >= 6) {
+							if ($this->model->updatePassword([
+								'login' => $_SESSION['authorization']['login'],
+								'currentPassword' => $_POST['currentPassword'],
+								'newPassword' => $_POST['newPassword']
+							])) {
+								echo 'OK';
+								return;
+							}
+						}
+					}
+				}
 			}
-			else{
-				echo 'ERROR';
-			}
-			return;
 		}
+		echo 'ERROR';
 	}
 }

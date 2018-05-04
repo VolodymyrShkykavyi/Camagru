@@ -1,9 +1,17 @@
-var btnDelImage = document.querySelectorAll('.btn-del-img');
+let btnDelImage = document.querySelectorAll('.btn-del-img');
+let btnDelImageSidebar = document.querySelectorAll('.btn-del-img-sidebar');
 
-function deleteImage(event) {
+function deleteImage(event, elem=false) {
     event.preventDefault();
     if (confirm('Do you really want to delete this image?')) {
-        var aTag = this.parentElement.parentElement;
+        var aTag = '';
+        if (elem){
+            aTag = elem.parentElement.parentElement;
+        }
+        else{
+            aTag = this.parentElement.parentElement;
+        }
+
         var path = '/gallery/image/';
         var id = aTag.href.substr(aTag.href.indexOf(path) + path.length);
         if (!id) {
@@ -27,6 +35,12 @@ function deleteImage(event) {
         data.append('delId', id);
         xhr.send(data);
     }
+}
+
+if (btnDelImageSidebar) {
+    [].forEach.call(btnDelImageSidebar, function (el) {
+        el.addEventListener('click', deleteImage);
+    });
 }
 if (btnDelImage) {
     [].forEach.call(btnDelImage, function (el) {

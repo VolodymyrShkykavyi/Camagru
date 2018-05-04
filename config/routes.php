@@ -67,8 +67,8 @@ return array(
 	],
 
 	'gallery/montage' => [
-		'controller' => 'gallery',
-		'action' => 'montage'
+		'controller' => 'montage',
+		'action' => 'index'
 	],
 
 	'gallery/image(?:/([0-9]+))?' => [
@@ -95,4 +95,9 @@ return array(
 		'controller' => 'montage',
 		'action' => 'upload'
 	],
+
+	'account/modify' => [
+		'controller' => 'account',
+		'action' => 'modify'
+	]
 );

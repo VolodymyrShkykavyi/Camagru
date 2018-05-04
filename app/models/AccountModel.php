@@ -6,32 +6,32 @@ use app\core\Model;
 
 class AccountModel extends Model
 {
-    public function authorization($login, $pswd)
-    {
-        $params = [
-            'login' => htmlspecialchars(trim($login)),
-            'passw' => hash('whirlpool', $pswd),
-        ];
-        $res = $this->db->query_fetched('SELECT * FROM users WHERE `login` = :login AND `passw` = :passw', $params);
-        if (!empty($res)){
-            return $res[0];
-        }
-        return $res;
-    }
+	public function authorization($login, $pswd)
+	{
+		$params = [
+			'login' => htmlspecialchars(trim($login)),
+			'passw' => hash('whirlpool', $pswd),
+		];
+		$res = $this->db->query_fetched('SELECT * FROM users WHERE `login` = :login AND `passw` = :passw', $params);
+		if (!empty($res)) {
+			return $res[0];
+		}
+		return $res;
+	}
 
-    public function registration($arr)
+	public function registration($arr)
 	{
 		$pattern_email = '@\A[a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*\@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\z@';
-		if (empty($arr)){
+		if (empty($arr)) {
 			return (false);
 		}
-		if (!isset($arr['login']) || empty($arr['login'])||
+		if (!isset($arr['login']) || empty($arr['login']) ||
 			!isset($arr['password']) || empty($arr['password']) || strlen($arr['password']) < 6 ||
-			!isset($arr['email']) || !preg_match($pattern_email, $arr['email'])){
+			!isset($arr['email']) || !preg_match($pattern_email, $arr['email'])) {
 			return (false);
 		}
 		$arr['login'] = htmlspecialchars(trim($arr['login']));
-		if (empty($arr['login'])){
+		if (empty($arr['login'])) {
 			return (false);
 		}
 		$arr['password'] = hash('whirlpool', $arr['password']);
@@ -40,11 +40,11 @@ class AccountModel extends Model
 			'email' => $arr['email']
 		];
 		$res_check = $this->db->query_fetched('SELECT * FROM `users` WHERE `login` = :login OR `email` = :email;', $params);
-		if (!empty($res_check)){
+		if (!empty($res_check)) {
 			return (false);
 		}
 		$params['password'] = $arr['password'];
-		if (!($this->db->query('INSERT INTO `users` (`login`, `passw`, `email`) VALUES (:login, :password, :email);', $params))){
+		if (!($this->db->query('INSERT INTO `users` (`login`, `passw`, `email`) VALUES (:login, :password, :email);', $params))) {
 			return (false);
 		}
 		return (true);
@@ -64,7 +64,7 @@ class AccountModel extends Model
 			'login' => htmlspecialchars(trim($login))
 		];
 		$res = $this->db->query_fetched('SELECT * FROM `users` WHERE `login` = :login;', $params);
-		if(!empty($res) && $res[0]['verified']){
+		if (!empty($res) && $res[0]['verified']) {
 			return (true);
 		}
 		return (false);
@@ -76,7 +76,7 @@ class AccountModel extends Model
 			'login' => htmlspecialchars(trim($login))
 		];
 		$res = $this->db->query_fetched('SELECT * FROM `users` WHERE `login` = :login;', $params);
-		if (!empty($res)){
+		if (!empty($res)) {
 			return ($res[0]['email']);
 		}
 		return (false);
@@ -88,7 +88,7 @@ class AccountModel extends Model
 			'login' => htmlspecialchars(trim($login))
 		];
 		$res = $this->db->query_fetched('SELECT * FROM `users` WHERE `login` = :login;', $params);
-		if (!empty($res)){
+		if (!empty($res)) {
 			return ($res[0]['id']);
 		}
 		return (false);
@@ -96,26 +96,91 @@ class AccountModel extends Model
 
 	public function validLoginEmail($arr)
 	{
-		if (isset($arr['login'])){
+		if (isset($arr['login'])) {
 			$params = [
 				'login' => htmlspecialchars(trim($arr['login']))
 			];
 			$res = $this->db->query_fetched('SELECT * FROM `users` WHERE `login` = :login', $params);
-			if (!empty($res)){
+			if (!empty($res)) {
 				return (false);
 			}
 			return (true);
-		}
-		elseif (isset($arr['email'])){
+		} elseif (isset($arr['email'])) {
 			$params = [
 				'email' => $arr['email']
 			];
 			$res = $this->db->query_fetched('SELECT * FROM `users` WHERE `email` = :email', $params);
-			if (!empty($res)){
+			if (!empty($res)) {
 				return (false);
 			}
 			return (true);
 		}
 		return (false);
+	}
+
+	public function updateLogin($data)
+	{
+		if (empty($data) || !isset($data['login']) || !isset($data['newLogin'])
+			|| !isset($data['password'])) {
+			return (false);
+		}
+		$data['login'] = trim($data['login']);
+		if (empty($this->authorization($data['login'], $data['password']))) {
+			return (false);
+		}
+		$this->db->query('UPDATE `users` SET `login` = :newLogin WHERE `login` = :login', [
+			'login' => htmlspecialchars($data['login']),
+			'newLogin' => $data['newLogin']
+		]);
+		if (empty($this->authorization($data['newLogin'], $data['password']))) {
+			return (false);
+		}
+		return (true);
+	}
+
+	public function updateEmail($data)
+	{
+		if (empty($data) || !isset($data['login']) || !isset($data['newEmail'])
+			|| !isset($data['password'])) {
+			return (false);
+		}
+		$data['login'] = trim($data['login']);
+		if (empty($this->authorization($data['login'], $data['password']))) {
+			return (false);
+		}
+		if (!$this->validLoginEmail([
+				'email' => $data['newEmail']
+			])) {
+			return (false);
+		}
+		$this->db->query('UPDATE `users` SET `email` = :newEmail WHERE `login` = :login;', [
+			'newEmail' => $data['newEmail'],
+			'login' => $data['login']
+		]);
+		if (!$this->validLoginEmail([
+			'email' => $data['newEmail']
+		])) {
+			return (true);
+		}
+		return (false);
+	}
+
+	public function updatePassword($data)
+	{
+		if (empty($data) || !isset($data['login']) || !isset($data['currentPassword']) ||
+			!isset($data['newPassword'])){
+			return (false);
+		}
+		if (empty($this->authorization($data['login'], $data['currentPassword']))){
+			return (false);
+		}
+		$this->db->query('UPDATE `users` SET `passw` = :newPassword WHERE `login` = :login;', [
+			'newPassword' =>  hash('whirlpool', $data['newPassword']),
+			'login' => $data['login']
+		]);
+		if (empty($this->authorization($data['login'], $data['newPassword']))){
+			return (false);
+		}
+		return (true);
 	}
 }
