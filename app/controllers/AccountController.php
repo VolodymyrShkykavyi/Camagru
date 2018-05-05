@@ -205,4 +205,9 @@ class  AccountController extends Controller
 		}
 		echo 'ERROR';
 	}
+
+	public function lostAction()
+	{
+		$this->view->render('Lost password?');
+	}
 }

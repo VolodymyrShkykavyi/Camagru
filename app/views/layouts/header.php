@@ -1,10 +1,10 @@
 <header class="container-fluid bg-dark text-light">
     <div class="row">
-        <div class="col-md-5 vertical-center">
+        <div class="col-md-3 vertical-center">
             <h1><a id="logo" href="/">Camagru</a></h1>
         </div>
-        <div class="col-md-2 vertical-center">
-            <a href="/gallery/montage" class="btn btn-primary">Make Photo!</a>
+        <div class="col-md-4 vertical-center justify-content-center">
+            <a href="/gallery/montage" class="btn btn-primary ml-lg-5 ml-md-5">Make Photo!</a>
         </div>
         <div class="col-md-5">
             <div class="pull-right d-inline-flex">
@@ -23,7 +23,7 @@
                             <i class="fa fa-chevron-right text-dark"></i>
                         </button>
                         <div class="small">
-                            <a href="/">Lost password? </a><!--TODO: reinitialization mail-->
+                            <a href="/account/lost">Lost password? </a><!--TODO: reinitialization mail-->
                             <a href="/register" style="float: right;">Register</a>
                         </div>
                     </form>

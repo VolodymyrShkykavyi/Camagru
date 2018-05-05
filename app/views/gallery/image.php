@@ -6,8 +6,7 @@
             <div class="w-100">
                         <span class="small text-left">
                             <em>author: </em>
-                            <a class="text-info decoration-none"
-                               href="/gallery/user/<?= $ViewData['image']['userId']; ?>">
+                            <a class="text-info decoration-none">
                                 <?= $ViewData['image']['author']; ?>
                             </a>
                         </span>

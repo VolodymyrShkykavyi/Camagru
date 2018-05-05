@@ -1,17 +1,13 @@
-<div class="row p-4">
-    <div class="col-md-6">
-        <a class="btn btn-primary" href="/gallery/montage">Montage photo</a>
-    </div>
-    <div class="col-md-6 m-auto">
-        <a class="btn btn-primary" href="/gallery/upload">Upload photos</a>
-    </div>
+<div class="text-center">
+    <h1>All photos</h1>
 </div>
+<hr class="gradient-line">
 
 <?php
 if (isset($ViewData) && isset($ViewData['images'])) {
 	foreach ($ViewData['images'] as $img) {
 		?>
-        <div class="row pb-3">
+        <div class="row pb-3 mt-3">
             <div class="col-sm-12 col-md-8 m-auto img-thumbnail p-1">
                 <a href="/gallery/image/<?= $img['id']; ?>" class="d-block position-relative">
                     <div class="">
@@ -32,7 +28,7 @@ if (isset($ViewData) && isset($ViewData['images'])) {
                     <div class="w-100">
                         <span class="small text-left">
                             <em>author: </em>
-                            <a class="text-info decoration-none" href="/gallery/user/<?= $img['userId']; ?>">
+                            <a class="text-info decoration-none">
                                 <?= $img['login']; ?>
                             </a>
                         </span>
@@ -93,4 +89,3 @@ if (isset($ViewData) && isset($ViewData['images'])) {
 
 <script src="/public/scripts/likes.js"></script>
 <script src="/public/scripts/comment.js"></script>
-<script src="/public/scripts/deleteImage.js"></script>

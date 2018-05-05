@@ -99,5 +99,10 @@ return array(
 	'account/modify' => [
 		'controller' => 'account',
 		'action' => 'modify'
+	],
+
+	'account/lost' => [
+		'controller' => 'account',
+		'action' => 'lost'
 	]
 );
