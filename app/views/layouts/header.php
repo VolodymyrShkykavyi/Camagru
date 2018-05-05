@@ -1,13 +1,15 @@
 <header class="container-fluid bg-dark text-light">
     <div class="row">
-        <div class="col-md-3 vertical-center">
-            <h1><a id="logo" href="/">Camagru</a></h1>
+        <div class="col-md-3 vertical-center ">
+            <h1 class="m-auto">
+                <a id="logo" href="/">Camagru</a>
+            </h1>
         </div>
-        <div class="col-md-4 vertical-center justify-content-center">
+        <div class="col-md-4 pt-2 pb-2 vertical-center justify-content-center text-center">
             <a href="/gallery/montage" class="btn btn-primary ml-lg-5 ml-md-5">Make Photo!</a>
         </div>
-        <div class="col-md-5">
-            <div class="pull-right d-inline-flex">
+        <div class="col-md-5 text-center">
+            <div class="float-lg-right float-md-right d-inline-flex">
 				<?php if (!isset($_SESSION['authorization']) || empty($_SESSION['authorization'])
 					|| empty($_SESSION['authorization']['login'])): ?>
                     <form id="login-form" action="/account/login" method="post">
@@ -23,7 +25,7 @@
                             <i class="fa fa-chevron-right text-dark"></i>
                         </button>
                         <div class="small">
-                            <a href="/account/lost">Lost password? </a><!--TODO: reinitialization mail-->
+                            <a href="/account/lost">Lost password? </a>
                             <a href="/register" style="float: right;">Register</a>
                         </div>
                     </form>

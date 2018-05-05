@@ -63,15 +63,15 @@ if (isset($ViewData) && isset($ViewData['images'])) {
 					<?php if (isset($_SESSION['authorization']) && !empty($_SESSION['authorization'])): ?>
                         <form class="form_comment" method="post">
                             <div class="form-row mt-2">
-                                <div class="col-11">
+                                <div class="col-9 col-sm-10 col-md-10 col-lg-10 col-xl-11">
                                     <textarea class="form-control shadow-none" rows="2"
                                               id="comment" name="comment"
                                               placeholder="Write your comment here..."></textarea>
                                 </div>
                                 <input type="hidden" name="imageId" value="<?= $img['id']; ?>">
-                                <div class="col-1 vertical-center">
+                                <div class="col-3 col-sm-2 col-md-2 col-lg-2 col-xl-1 vertical-center">
                                     <button type="button" name="btn_submit"
-                                            class="btn btn-primary rounded-circle pl-2 shadow-none">
+                                            class="btn btn-primary rounded-circle pl-2 shadow-none m-auto">
                                         <i class="fa fa-send"></i>
                                     </button>
                                 </div>
@@ -85,7 +85,7 @@ if (isset($ViewData) && isset($ViewData['images'])) {
 		<?php
 	}
 } ?>
-<?php include_once('/app/views/templates/pagination.php'); ?>
+<?php include_once(ROOT . '/app/views/templates/pagination.php'); ?>
 
 <script src="/public/scripts/likes.js"></script>
 <script src="/public/scripts/comment.js"></script>

@@ -13,13 +13,10 @@ abstract class  Controller
 
 	public function __construct($route)
 	{
-		if (isset($_SESSION['authorization'])) {
+		if (isset($_SESSION['authorization']) && !empty($_SESSION['authorization'])) {
 			if (!$_SESSION['authorization']['verified']) {
-				if (!($route['controller'] == 'account' &&
-						($route['action'] == 'verify' || $route['action'] == 'logout' ||
-							$route['action'] == 'settings') || $route['action'] == 'modify') &&
-					!($route['controller'] == 'gallery' && $route['action'] == 'index') &&
-					!($route['controller']) == 'register' && $route['action'] == 'validate'){
+				if (($route['controller'] == 'gallery' && $route['action'] == 'upload') ||
+                ($route['controller'] == 'montage' && $route['action'] == 'index')){
 					View::redirect('/account/verify');
 					return;
 				}

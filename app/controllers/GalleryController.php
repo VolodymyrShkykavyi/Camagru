@@ -159,7 +159,7 @@ class GalleryController extends Controller
 				}
 				$email = $this->model->getUserEmail($_SESSION['authorization']['login']);
 				$text = 'Your image has been liked.<br>link: ' .
-					$_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . '/gallery/image/' . $_POST['imageId'];
+					$_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/gallery/image/' . $_POST['imageId'];
 				//TODO: maybe async?
 				Mail::sendMail($email, 'Image update', $text);
 			}
@@ -190,7 +190,7 @@ class GalleryController extends Controller
 			}
 			$email = $this->model->getUserEmail($_SESSION['authorization']['login']);
 			$text = 'Your image has been commented.<br>link: ' .
-				$_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . '/gallery/image/' . $_POST['imageId'];
+				$_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/gallery/image/' . $_POST['imageId'];
 			//TODO: maybe async?
 			Mail::sendMail($email, 'Image update', $text);
 			echo($id);

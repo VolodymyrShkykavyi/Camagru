@@ -10,14 +10,14 @@
 </head>
 <body class="bg-light">
 <?php require_once(ROOT . '/app/views/layouts/header.php'); ?>
-
-<div class="container bg-white">
-    <div class="row">
-        <div id="wrapper" class="col-md-10">
-			<?php echo $content; ?>
+<?php require_once(ROOT . '/app/views/layouts/mobileMenu.php'); ?>
+<div class="container bg-light">
+    <div class="row m-0">
+        <div id="wrapper" class="col-md-9 col-lg-9 bg-white">
+            <?php echo $content; ?>
         </div>
-        <div id="sidebar" class="col-md-2 bg-light pt-2">
-            <?php require_once (ROOT . '/app/views/layouts/sidebar.php');?>
+        <div id="sidebar" class="col-md-3 col-lg-3 bg-light pt-3">
+            <?php require_once(ROOT . '/app/views/layouts/sidebar.php'); ?>
         </div>
     </div>
 </div>

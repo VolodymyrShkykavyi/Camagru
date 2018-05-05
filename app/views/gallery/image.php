@@ -32,7 +32,7 @@
             <div class="">
                 <div class="card-header col-12 mb-3">Comments</div>
                 <div class="card-body pt-1">
-					<?php include_once('/app/views/templates/imageComments.php'); ?>
+					<?php include_once(ROOT . '/app/views/templates/imageComments.php'); ?>
 					<?php if (isset($_SESSION['authorization']) && !empty($_SESSION['authorization'])): ?>
                     <form class="form_comment w-100 mr-1 ml-3" method="post">
                         <div class="form-row mt-2">

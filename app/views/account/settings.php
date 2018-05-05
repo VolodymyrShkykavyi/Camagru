@@ -8,13 +8,15 @@
             <div class="col-12 mb-3">
                 <span class="text-success h6 mb-1">Change login</span>
                 <form id="change-login" class="form-row vertical-center">
-                    <input type="text" class="form-control mb-1 col-5" name="newLogin" placeholder="New username">
-                    <div class="col-md-7 col-lg-7 col-sm-12  pl-2">
+                    <input type="text" class="form-control mb-1 col-12 col-sm-12 col-md-6 col-lg-5 col-xl-5"
+                           name="newLogin" placeholder="New username">
+                    <div class="col-lg-7 col-xl-7 col-sm-12 col-md-6  pl-2">
                         <span id="change-login-login-status" class="fa d-none preloader text-left"></span>
                     </div>
-                    <input type="password" class="form-control mb-1 col-5" name="password"
+                    <input type="password" class="form-control mb-1 col-12 col-sm-12 col-md-6 col-lg-5 col-xl-5"
+                           name="password"
                            placeholder="Yor password">
-                    <div class="col-md-7 col-lg-7 col-sm-12 pl-2">
+                    <div class="col-lg-7 col-xl-7 col-sm-12 col-md-6 col-12 pl-2">
                         <span id="change-login-psw-status" class="fa d-none"></span>
                     </div>
                     <button type="button" name="submit" class="btn btn-primary shadow-none float-right">Change
@@ -26,12 +28,14 @@
             <div class="col-12 mb-3">
                 <span class="text-success h6 mb-1">Change email</span>
                 <form id="change-email" class="form-row vertical-center">
-                    <input type="email" class="form-control mb-1 col-5" name="newEmail" placeholder="New E-Mail">
-                    <div class="col-md-7 col-lg-7 col-sm-12 pl-2">
+                    <input type="email" class="form-control mb-1 col-12 col-sm-12 col-md-6 col-lg-5 col-xl-5"
+                           name="newEmail" placeholder="New E-Mail">
+                    <div class="col-lg-7 col-xl-7 col-sm-12 col-md-6 pl-2">
                         <span id="change-email-email-status" class="fa d-none text-left"></span>
                     </div>
-                    <input type="password" class="form-control mb-1 col-5" name="password" placeholder="Yor password">
-                    <div class="col-md-7 col-lg-7 col-sm-12 pl-2">
+                    <input type="password" class="form-control mb-1 col-12 col-sm-12 col-md-6 col-lg-5 col-xl-5"
+                           name="password" placeholder="Yor password">
+                    <div class="col-lg-7 col-xl-7 col-sm-12 col-md-6 pl-2">
                         <span id="change-email-psw-status" class="fa d-none text-left"></span>
                     </div>
                     <button type="button" name="submit" class="btn btn-primary shadow-none float-right">Change E-Mail
@@ -42,19 +46,22 @@
             <div class="col-12 mb-3">
                 <span class="text-success h6 mb-1">Change password</span>
                 <form id="change-password" class="form-row vertical-center">
-                    <input type="password" class="form-control mb-1 col-5" name="CurrPassword"
+                    <input type="password" class="form-control mb-1 col-12 col-sm-12 col-md-6 col-lg-5 col-xl-5"
+                           name="CurrPassword"
                            placeholder="Current password" required>
-                    <div class="col-md-7 col-lg-7 col-sm-12 pl-2">
+                    <div class="col-lg-7 col-xl-7 col-sm-12 col-md-6 pl-2">
                         <span id="change-psw-current-status" class="fa d-none text-left"></span>
                     </div>
-                    <input type="password" class="form-control mb-1 col-5" name="NewPassword" placeholder="New password"
+                    <input type="password" class="form-control mb-1 col-12 col-sm-12 col-md-6 col-lg-5 col-xl-5"
+                           name="NewPassword" placeholder="New password"
                            required>
-                    <div class="col-md-7 col-lg-7 col-sm-12 pl-2">
+                    <div class="col-lg-7 col-xl-7 col-sm-12 col-md-6 pl-2">
                         <span id="change-psw-new-status" class="fa d-none text-left"></span>
                     </div>
-                    <input type="password" class="form-control mb-1 col-5" name="RepeatPassword"
+                    <input type="password" class="form-control mb-1 col-12 col-sm-12 col-md-6 col-lg-5 col-xl-5"
+                           name="RepeatPassword"
                            placeholder="Repeat new password" required>
-                    <div class="col-md-7 col-lg-7 col-sm-12 pl-2">
+                    <div class="col-lg-7 col-xl-7 col-sm-12 col-md-6 pl-2">
                         <span id="change-psw-repeat-status" class="fa d-none text-left"></span>
                     </div>
                     <button type="button" name="submit" class="btn btn-primary shadow-none float-right">Change
@@ -74,22 +81,22 @@
             <div class="form-check">
                 <label class="form-check-label">
                     <input type="checkbox" class="form-check-input" name="like"
-						<?php
-                            if (empty($ViewData['settings']) || !$ViewData['settings']['mailLike'] == '0') {
-								echo 'checked';
-							}
-						?>>
+                        <?php
+                        if (empty($ViewData['settings']) || !$ViewData['settings']['mailLike'] == '0') {
+                            echo 'checked';
+                        }
+                        ?>>
                     Send an email when your image was liked
                 </label>
             </div>
             <div class="form-check">
                 <label class="form-check-label">
                     <input type="checkbox" class="form-check-input" name="comment"
-						<?php
-						if (empty($ViewData['settings']) || !$ViewData['settings']['mailComment'] == '0') {
-							echo 'checked';
-						}
-						?>>
+                        <?php
+                        if (empty($ViewData['settings']) || !$ViewData['settings']['mailComment'] == '0') {
+                            echo 'checked';
+                        }
+                        ?>>
                     Send an email when your image was commented
                 </label>
             </div>

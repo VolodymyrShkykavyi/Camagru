@@ -27,7 +27,7 @@ class  AccountController extends Controller
 	{
 		if (!empty($login)) {
 			$email = $this->model->getUserEmail($login);
-			$text = 'Follow this link:' . $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . '/account/verify?login=' .
+			$text = 'Follow this link:' . $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/account/verify?login=' .
 				urlencode($login) . '&token=' .
 				urlencode(hash('md5', $login . date('Y-m-d'))) .
 				"<br> Good luck!";
@@ -246,7 +246,7 @@ class  AccountController extends Controller
 					$token = hash('whirlpool', AccountController::getUserToken($_REQUEST['login']) . $id);
 					$email = $this->model->getUserEmail($_POST['login']);
 					$text = 'Follow <a href="' .
-						$_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . '/account/lost?login=' .
+						$_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/account/lost?login=' .
 						urlencode($_POST['login']) . '&token=' . urlencode($token) .
 						'">this link</a> if you want reset your current password';
 					Mail::sendMail($email, 'Reset password', $text);
