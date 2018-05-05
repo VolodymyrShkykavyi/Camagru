@@ -41,6 +41,14 @@ if (empty($db->query_fetched('SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMAT
 	PRIMARY KEY (`id`)
 );');
 
+	$db->query('CREATE TABLE IF NOT EXISTS `settings` (
+	`id` int NOT NULL AUTO_INCREMENT,
+	`userId` INT NOT NULL UNIQUE , 
+	`mailComment` tinyint(1),
+	`mailLike` tinyint(1),
+	PRIMARY KEY (`id`)
+);');
+
 	$db->query('INSERT INTO `users` (`login`, `email`, `passw`, `verified`, `admin`) VALUES
 (\'admin\', \'email@email.com\', \'' . hash('whirlpool', '12345') . '\', 1, 1),
 (\'user\', \'usermail@mail.com\', \''. hash('whirlpool', '12345') . '\', 1, 0)

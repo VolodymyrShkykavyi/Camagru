@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\core\Controller;
 use app\core\View;
+use app\lib\Mail;
 use app\lib\Pagination;
 
 class GalleryController extends Controller
@@ -149,7 +150,18 @@ class GalleryController extends Controller
 		];
 		if (isset($_POST['addLike'])) {
 			if ($this->model->addLike($data)) {
-				//TODO: send email
+				$this->model = $this->loadModel('Account');
+				$settings = $this->model->getUserSettings($_SESSION['authorization']['id']);
+				if (!empty($settings) && isset($settings['mailLike']) &&
+					$settings['mailLike'] == '0'){
+					echo "OK";
+					return;
+				}
+				$email = $this->model->getUserEmail($_SESSION['authorization']['login']);
+				$text = 'Your image has been liked.<br>link: ' .
+					$_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . '/gallery/image/' . $_POST['imageId'];
+				//TODO: maybe async?
+				Mail::sendMail($email, 'Image update', $text);
 			}
 		} elseif (isset($_POST['delLike'])) {
 			$this->model->delLike($data);
@@ -169,7 +181,18 @@ class GalleryController extends Controller
 				'imageId' => $_POST['imageId'],
 				'comment' => htmlspecialchars($_POST['comment'])
 			]);
-			//TODO: send mail
+			$this->model = $this->loadModel('Account');
+			$settings = $this->model->getUserSettings($_SESSION['authorization']['id']);
+			if (!empty($settings) && isset($settings['mailComment']) &&
+				$settings['mailComment'] == '0'){
+				echo $id;
+				return;
+			}
+			$email = $this->model->getUserEmail($_SESSION['authorization']['login']);
+			$text = 'Your image has been commented.<br>link: ' .
+				$_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . '/gallery/image/' . $_POST['imageId'];
+			//TODO: maybe async?
+			Mail::sendMail($email, 'Image update', $text);
 			echo($id);
 			return;
 		}

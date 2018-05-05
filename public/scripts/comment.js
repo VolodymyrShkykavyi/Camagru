@@ -45,7 +45,7 @@ function sendComment(form) {
                         form.comment.value = "";
                     }
                     else {
-                        //TODO: err msg
+                        alert('Something going wrong. Please try again later');
                     }
 
                 }

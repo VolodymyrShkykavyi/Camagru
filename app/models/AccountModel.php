@@ -183,4 +183,16 @@ class AccountModel extends Model
 		}
 		return (true);
 	}
+
+	public function getUserSettings($id)
+	{
+		if (!$id || !is_numeric($id) || $id <= 0){
+			return (array());
+		}
+		$res = $this->db->query_fetched('SELECT * FROM `settings` WHERE `userId` = :id', ['id' => $id]);
+		if (!empty($res)){
+			return ($res[0]);
+		}
+		return ($res);
+	}
 }

@@ -26,6 +26,7 @@ function changeLike(el, id) {
               numLikes.innerHTML = (parseInt(numLikes.innerHTML) + localType).toString();
               el.classList.toggle("fa-heart-o");
           }
+          console.log(this.response);
       }
     };
     xhr.send(data);

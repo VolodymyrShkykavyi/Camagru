@@ -135,7 +135,6 @@ function uploadImage() {
             btnLoader.style.display = 'none';
             btnSubmit.style.display = 'block';
             if (xhr.status == 200 && this.response && this.response != 'ERROR') {
-                //TODO: show btn, add img
                 decoration_context.clearRect(0, 0, decoration.width, decoration.height);
                 if (!isWebCam){
                     canvas_context.clearRect(0, 0, canvas.width, canvas.height);

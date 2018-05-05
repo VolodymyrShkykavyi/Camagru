@@ -64,6 +64,7 @@
         <div>
             <h2>Notifications</h2>
         </div>
+        <?php //TODO: load check from db?>
         <form id="change-notifications">
             <div class="form-check">
                 <label class="form-check-label">

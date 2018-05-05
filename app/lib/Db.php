@@ -12,7 +12,7 @@ class Db
 
     public function __construct()
     {
-        require_once (ROOT . '/config/database.php');
+        require (ROOT . '/config/database.php');
         try {
             $this->db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
