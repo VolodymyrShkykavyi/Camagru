@@ -3,11 +3,12 @@ use app\lib\Db;
 
 define('ROOT', $_SERVER['DOCUMENT_ROOT']);
 require_once ('../app/lib/Db.php');
-$db = new Db();
+$db = new Db('mysql:host=127.0.0.1', 'root', '');
 
 if (empty($db->query_fetched('SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = \'camagru\'')))
 {
 	$db->query('CREATE DATABASE camagru');
+	$db = new Db();
 
 	$db->query('CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

@@ -106,11 +106,12 @@ class  AccountController extends Controller
 			unset($_POST['sent_mail']);
 		}
 		if (isset($_GET['login']) && isset($_GET['token'])) {
-			$token_check = hash('md5', urldecode($_GET['login']) . date('Y-m-d'));
-			if ($token_check == urldecode($_GET['token'])) {
-				$this->model->verify(urldecode($_GET['login']));
+			$token_check = hash('md5', $_GET['login'] . date('Y-m-d'));
+			if ($token_check == $_GET['token']) {
+				$this->model->verify($_GET['login']);
 				if (isset($_SESSION['authorization']) && !empty($_SESSION['authorization'])) {
 					$_SESSION['authorization']['verified'] = 1;
+					View::redirect('/');
 				}
 			}
 		}
@@ -208,6 +209,50 @@ class  AccountController extends Controller
 
 	public function lostAction()
 	{
-		$this->view->render('Lost password?');
+		if (AccountController::checkUserToken()){
+			View::redirect('/');
+		}
+		if (isset($_REQUEST['token']) && isset($_REQUEST['login'])){
+			if ($id = $this->model->getUserId($_REQUEST['login'])) {
+				$token = hash('whirlpool', AccountController::getUserToken($_REQUEST['login']) . $id);
+				if ($token === $_REQUEST['token']) {
+					$this->ViewData['token'] = $token;
+					$this->ViewData['login'] = $_REQUEST['login'];
+					if (isset($_POST['newPassword']) && isset($_POST['repeatPassword']) &&
+						isset($_POST['action']) && $_POST['action'] == 'resetPassword' &&
+						isset($_POST['login']) &&
+						$_POST['newPassword'] === $_POST['repeatPassword'] &&
+						strlen($_POST['repeatPassword']) >= 6){
+						if ($this->model->resetUserPassword([
+							'login' => $_POST['login'],
+							'newPassword' => $_POST['newPassword']
+						])) {
+							$this->ViewData['result'] = 'OK';
+						}
+						else {
+							$this->ViewData['result'] = 'ERROR';
+						}
+					}
+				}
+				else{
+					$this->ViewData['token'] = false;
+				}
+			}
+		}
+		else {
+			if (isset($_POST['login']) && isset($_POST['action']) &&
+			$_POST['action'] == 'sendMail') {
+				if ($id = $this->model->getUserId($_POST['login'])) {
+					$token = hash('whirlpool', AccountController::getUserToken($_REQUEST['login']) . $id);
+					$email = $this->model->getUserEmail($_POST['login']);
+					$text = 'Follow <a href="' .
+						$_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . '/account/lost?login=' .
+						urlencode($_POST['login']) . '&token=' . urlencode($token) .
+						'">this link</a> if you want reset your current password';
+					Mail::sendMail($email, 'Reset password', $text);
+				}
+			}
+		}
+		$this->view->render('Lost password?', $this->ViewData);
 	}
 }

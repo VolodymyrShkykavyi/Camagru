@@ -10,9 +10,11 @@ class Db
 {
     protected $db;
 
-    public function __construct()
+    public function __construct($DB_DSN = false, $DB_USER = false, $DB_PASSWORD = false)
     {
-        require (ROOT . '/config/database.php');
+    	if ($DB_DSN === false || $DB_USER === false || $DB_PASSWORD === false) {
+			require(ROOT . '/config/database.php');
+		}
         try {
             $this->db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

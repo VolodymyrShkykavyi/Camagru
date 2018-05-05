@@ -234,4 +234,20 @@ class AccountModel extends Model
 		}
 		return (false);
 	}
+
+	public function resetUserPassword($data)
+	{
+		if (empty($data) || !isset($data['login']) || !isset($data['newPassword'])){
+			return (false);
+		}
+		if (!$this->getUserId($data['login'])){
+			return (false);
+		}
+		$data['newPassword'] = hash('whirlpool', $data['newPassword']);
+		$this->db->query('UPDATE `users` SET `passw` = :newPassword WHERE `login` = :login', [
+			'login' => $data['login'],
+			'newPassword' => $data['newPassword']
+		]);
+		return (true);
+	}
 }
