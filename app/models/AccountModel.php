@@ -148,9 +148,10 @@ class AccountModel extends Model
 		if (empty($this->authorization($data['login'], $data['password']))) {
 			return (false);
 		}
+
 		if (!$this->validLoginEmail([
-				'email' => $data['newEmail']
-			])) {
+			'email' => $data['newEmail']
+		])) {
 			return (false);
 		}
 		$this->db->query('UPDATE `users` SET `email` = :newEmail WHERE `login` = :login;', [
@@ -168,17 +169,17 @@ class AccountModel extends Model
 	public function updatePassword($data)
 	{
 		if (empty($data) || !isset($data['login']) || !isset($data['currentPassword']) ||
-			!isset($data['newPassword'])){
+			!isset($data['newPassword'])) {
 			return (false);
 		}
-		if (empty($this->authorization($data['login'], $data['currentPassword']))){
+		if (empty($this->authorization($data['login'], $data['currentPassword']))) {
 			return (false);
 		}
 		$this->db->query('UPDATE `users` SET `passw` = :newPassword WHERE `login` = :login;', [
-			'newPassword' =>  hash('whirlpool', $data['newPassword']),
+			'newPassword' => hash('whirlpool', $data['newPassword']),
 			'login' => $data['login']
 		]);
-		if (empty($this->authorization($data['login'], $data['newPassword']))){
+		if (empty($this->authorization($data['login'], $data['newPassword']))) {
 			return (false);
 		}
 		return (true);
@@ -186,13 +187,51 @@ class AccountModel extends Model
 
 	public function getUserSettings($id)
 	{
-		if (!$id || !is_numeric($id) || $id <= 0){
+		if (!$id || !is_numeric($id) || $id <= 0) {
 			return (array());
 		}
 		$res = $this->db->query_fetched('SELECT * FROM `settings` WHERE `userId` = :id', ['id' => $id]);
-		if (!empty($res)){
+		if (!empty($res)) {
 			return ($res[0]);
 		}
 		return ($res);
+	}
+
+	public function updateUserSettings($data)
+	{
+		if (empty($data) || !isset($data['notifyLike']) ||
+			!isset($data['notifyComment']) || !isset($data['userId'])
+			|| !is_numeric($data['userId'])) {
+			return (false);
+		}
+		$this->db->query('UPDATE `settings` SET `mailComment` = :notifyComment,
+						`mailLike` = :notifyLike WHERE `userId` = :userId', [
+			'notifyLike' => $data['notifyLike'],
+			'notifyComment' => $data['notifyComment'],
+			'userId' => $data['userId']
+		]);
+		return (true);
+	}
+
+	public function addUserSettings($data)
+	{
+		if (empty($data) || !isset($data['notifyLike']) ||
+			!isset($data['notifyComment']) || !isset($data['userId'])
+			|| !is_numeric($data['userId']) || $data['userId'] <= 0) {
+			return (false);
+		}
+		if (!empty($this->getUserSettings($data['userId']))) {
+			return (false);
+		}
+		$res = $this->db->query_insert('INSERT INTO `settings` (`userId`, `mailComment`, `mailLike`) VALUES 
+								(:userId, :notifyComment, :notifyLike);', [
+			'userId' => $data['userId'],
+			'notifyComment' => $data['notifyComment'],
+			'notifyLike' => $data['notifyLike']
+		]);
+		if ($res) {
+			return (true);
+		}
+		return (false);
 	}
 }

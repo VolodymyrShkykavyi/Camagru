@@ -16,8 +16,10 @@ abstract class  Controller
 		if (isset($_SESSION['authorization'])) {
 			if (!$_SESSION['authorization']['verified']) {
 				if (!($route['controller'] == 'account' &&
-						($route['action'] == 'verify' || $route['action'] == 'logout')) &&
-					!($route['controller'] == 'gallery' && $route['action'] == 'index')){
+						($route['action'] == 'verify' || $route['action'] == 'logout' ||
+							$route['action'] == 'settings') || $route['action'] == 'modify') &&
+					!($route['controller'] == 'gallery' && $route['action'] == 'index') &&
+					!($route['controller']) == 'register' && $route['action'] == 'validate'){
 					View::redirect('/account/verify');
 					return;
 				}

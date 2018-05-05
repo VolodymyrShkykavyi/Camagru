@@ -60,7 +60,9 @@ class  AccountController extends Controller
 
 	public function settingsAction()
 	{
-		$this->view->render('Account settings');
+		$settings = $this->model->getUserSettings($_SESSION['authorization']['id']);
+		$this->ViewData['settings'] = $settings;
+		$this->view->render('Account settings', $this->ViewData);
 	}
 
 	public function logoutAction()
@@ -175,6 +177,25 @@ class  AccountController extends Controller
 								'currentPassword' => $_POST['currentPassword'],
 								'newPassword' => $_POST['newPassword']
 							])) {
+								echo 'OK';
+								return;
+							}
+						}
+					}
+				} elseif ($_POST['action'] == 'changeNotifications'){
+					if (isset($_POST['notifyLike']) && isset($_POST['notifyComment'])){
+						$settings = $this->model->getUserSettings($_SESSION['authorization']['id']);
+						$_POST['userId'] = $_SESSION['authorization']['id'];
+						$_POST['notifyLike'] = ($_POST['notifyLike'] == '0') ? '0' : '1';
+						$_POST['notifyComment'] = ($_POST['notifyComment'] == '0') ? '0' : '1';
+						if (!empty($settings)) {
+							if ($this->model->updateUserSettings($_POST)) {
+								echo 'OK';
+								return;
+							}
+						}
+						else {
+							if ($this->model->addUserSettings($_POST)) {
 								echo 'OK';
 								return;
 							}

@@ -17,7 +17,9 @@
                     <div class="col-md-7 col-lg-7 col-sm-12 pl-2">
                         <span id="change-login-psw-status" class="fa d-none"></span>
                     </div>
-                    <button type="button" name="submit" class="btn btn-primary shadow-none float-right">Change username</button>
+                    <button type="button" name="submit" class="btn btn-primary shadow-none float-right">Change
+                        username
+                    </button>
                 </form>
             </div>
 
@@ -32,7 +34,8 @@
                     <div class="col-md-7 col-lg-7 col-sm-12 pl-2">
                         <span id="change-email-psw-status" class="fa d-none text-left"></span>
                     </div>
-                    <button type="button" name="submit" class="btn btn-primary shadow-none float-right">Change E-Mail</button>
+                    <button type="button" name="submit" class="btn btn-primary shadow-none float-right">Change E-Mail
+                    </button>
                 </form>
             </div>
 
@@ -44,7 +47,8 @@
                     <div class="col-md-7 col-lg-7 col-sm-12 pl-2">
                         <span id="change-psw-current-status" class="fa d-none text-left"></span>
                     </div>
-                    <input type="password" class="form-control mb-1 col-5" name="NewPassword" placeholder="New password" required>
+                    <input type="password" class="form-control mb-1 col-5" name="NewPassword" placeholder="New password"
+                           required>
                     <div class="col-md-7 col-lg-7 col-sm-12 pl-2">
                         <span id="change-psw-new-status" class="fa d-none text-left"></span>
                     </div>
@@ -53,7 +57,9 @@
                     <div class="col-md-7 col-lg-7 col-sm-12 pl-2">
                         <span id="change-psw-repeat-status" class="fa d-none text-left"></span>
                     </div>
-                    <button type="button" name="submit" class="btn btn-primary shadow-none float-right">Change password</button>
+                    <button type="button" name="submit" class="btn btn-primary shadow-none float-right">Change
+                        password
+                    </button>
                 </form>
             </div>
         </div>
@@ -64,27 +70,32 @@
         <div>
             <h2>Notifications</h2>
         </div>
-        <?php //TODO: load check from db?>
         <form id="change-notifications">
             <div class="form-check">
                 <label class="form-check-label">
-                    <input type="checkbox" class="form-check-input" name="like" checked>
+                    <input type="checkbox" class="form-check-input" name="like"
+						<?php
+                            if (empty($ViewData['settings']) || !$ViewData['settings']['mailLike'] == '0') {
+								echo 'checked';
+							}
+						?>>
                     Send an email when your image was liked
                 </label>
             </div>
             <div class="form-check">
                 <label class="form-check-label">
-                    <input type="checkbox" class="form-check-input" name="comment" checked>
+                    <input type="checkbox" class="form-check-input" name="comment"
+						<?php
+						if (empty($ViewData['settings']) || !$ViewData['settings']['mailComment'] == '0') {
+							echo 'checked';
+						}
+						?>>
                     Send an email when your image was commented
                 </label>
             </div>
-            <button type="button" class="btn btn-primary mt-2" name="submit">Apply</button>
+            <button type="button" class="btn btn-primary mt-2 shadow-none" name="submit">Apply</button>
         </form>
         <hr>
-    </div>
-    <div class="col-12">
-        <h2>smt</h2>
-        sett
     </div>
 </div>
 <script src="/public/scripts/accountSettings.js"></script>

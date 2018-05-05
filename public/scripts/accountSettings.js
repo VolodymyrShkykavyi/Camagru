@@ -169,6 +169,7 @@ function changeElemStatus(elem, status) {
                     changeElemStatus(pswStatus, statusArr[1]);
                     pswStatus.innerText = ' Wrong password';
                 }
+                console.log(this.response);
             }
             else if (xhr.readyState == XMLHttpRequest.DONE && xhr.status != 200) {
                 changeElemStatus(pswStatus, statusArr[1]);
@@ -229,7 +230,7 @@ function changeElemStatus(elem, status) {
         xhr.open('POST', '/account/modify', true);
         xhr.onreadystatechange = function () {
             if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
-                //form.reset();
+                form.reset();
                 if (this.response === 'OK') {
                     pswCurrStatus.style.display = 'none';
                     pswRepeatStatus.style.display = 'none';
@@ -241,6 +242,35 @@ function changeElemStatus(elem, status) {
                     pswCurrStatus.innerText = ' Wrong password';
                 }
                 else {
+                    alert('We have some problems. Please try again later');
+                }
+            }
+        };
+        xhr.send(data);
+    });
+}
+
+//notification settings
+{
+    let form = document.getElementById('change-notifications');
+
+    form.submit.addEventListener('click', function () {
+        let xhr = new XMLHttpRequest();
+        let data = new FormData();
+        let tmp = '0';
+
+        data.append('action', 'changeNotifications');
+        tmp = (form.like.checked) ? '1' : '0';
+        data.append('notifyLike', tmp);
+        tmp = (form.comment.checked) ? '1' : '0';
+        data.append('notifyComment', tmp);
+        xhr.open('POST', '/account/modify' , true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == XMLHttpRequest.DONE){
+                if (xhr.status == 200 && this.response == 'OK'){
+                    alert('Your notification setting has been changed');
+                }
+                else{
                     alert('We have some problems. Please try again later');
                 }
             }
