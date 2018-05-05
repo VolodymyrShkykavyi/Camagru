@@ -15,8 +15,6 @@
 	} ?>
 </ul>
 <?php
-//var_dump($ViewData);
-
 if (isset($ViewData) && isset($ViewData['thumbnails'])) { ?>
     <hr class="gradient-line mb-1">
     <div class="row pl-2">

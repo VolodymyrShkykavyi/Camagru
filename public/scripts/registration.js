@@ -101,7 +101,6 @@ email_input.addEventListener('blur', function () {
               else{
                   changeElemStatus(login_status, statusArr[1]);
                   email_status.innerText = ' We have some problems. Please try again later';
-                  console.log(this.response);
               }
           }
         };

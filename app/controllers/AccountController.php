@@ -23,7 +23,6 @@ class  AccountController extends Controller
 		return (false);
 	}
 
-
 	private function sendVerifyMail($login)
 	{
 		if (!empty($login)) {

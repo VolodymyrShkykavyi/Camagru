@@ -8,7 +8,6 @@
 </div>
 
 <?php
-//var_dump($ViewData['images'][0]);
 if (isset($ViewData) && isset($ViewData['images'])) {
 	foreach ($ViewData['images'] as $img) {
 		?>

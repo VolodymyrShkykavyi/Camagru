@@ -129,7 +129,6 @@ function changeElemStatus(elem, status) {
                     else {
                         changeElemStatus(login_status, statusArr[1]);
                         emailStatus.innerText = ' We have some problems. Please try again later';
-                        console.log(this.response);
                     }
                 }
             };
@@ -169,7 +168,6 @@ function changeElemStatus(elem, status) {
                     changeElemStatus(pswStatus, statusArr[1]);
                     pswStatus.innerText = ' Wrong password';
                 }
-                console.log(this.response);
             }
             else if (xhr.readyState == XMLHttpRequest.DONE && xhr.status != 200) {
                 changeElemStatus(pswStatus, statusArr[1]);

@@ -1,10 +1,10 @@
-let btnDelImage = document.querySelectorAll('.btn-del-img');
-let btnDelImageSidebar = document.querySelectorAll('.btn-del-img-sidebar');
+var btnDelImage = document.querySelectorAll('.btn-del-img');
+var btnDelImageSidebar = document.querySelectorAll('.btn-del-img-sidebar');
 
 function deleteImage(event, elem=false) {
     event.preventDefault();
     if (confirm('Do you really want to delete this image?')) {
-        var aTag = '';
+        let aTag = '';
         if (elem){
             aTag = elem.parentElement.parentElement;
         }
@@ -12,12 +12,12 @@ function deleteImage(event, elem=false) {
             aTag = this.parentElement.parentElement;
         }
 
-        var path = '/gallery/image/';
-        var id = aTag.href.substr(aTag.href.indexOf(path) + path.length);
+        let path = '/gallery/image/';
+        let id = aTag.href.substr(aTag.href.indexOf(path) + path.length);
         if (!id) {
             return;
         }
-        var xhr = new XMLHttpRequest();
+        let xhr = new XMLHttpRequest();
         xhr.open('POST', '/gallery/delete', true);
 
         xhr.onreadystatechange = function () {
@@ -31,7 +31,7 @@ function deleteImage(event, elem=false) {
             }
         };
 
-        var data = new FormData();
+        let data = new FormData();
         data.append('delId', id);
         xhr.send(data);
     }
