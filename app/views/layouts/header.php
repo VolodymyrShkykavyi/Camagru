@@ -21,7 +21,7 @@
                             <input type="password" class="form-control-sm" name="login_password" placeholder="Password"
                                    value="">
                         </div>
-                        <button type="submit" class="btn btn-primary" title="login">
+                        <button type="submit" name="submit" class="btn btn-primary" title="login">
                             <i class="fa fa-chevron-right text-dark"></i>
                         </button>
                         <div class="small">
@@ -29,6 +29,7 @@
                             <a href="/register" style="float: right;">Register</a>
                         </div>
                     </form>
+                <script src="/public/scripts/signin.js"></script>
 				<?php else: ?>
                     <div class="vertical-center mr-5">
                         Hello, <span id="user_login" class="ml-2"><?= $_SESSION['authorization']['login']; ?></span>

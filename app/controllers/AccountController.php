@@ -37,6 +37,8 @@ class  AccountController extends Controller
 
 	public function loginAction()
 	{
+		$ajaxReturn = array();
+
 		if (isset($_POST['login_username']) && isset($_POST['login_password'])) {
 			$res = $this->model->authorization($_POST['login_username'], $_POST['login_password']);
 			if (!empty($res)) {
@@ -45,15 +47,29 @@ class  AccountController extends Controller
 				$_SESSION['authorization']['token'] = AccountController::getUserToken($res['login']);
 				$_SESSION['authorization']['admin'] = $res['admin'];
 				$_SESSION['authorization']['verified'] = $res['verified'];
+				$ajaxReturn['status'] = 'OK';
 				if (!$res['verified']) {
-					$this->view->redirect('/account/verify');
+					if (isset($_POST['actionType']) && $_POST['actionType'] == 'ajax'){
+						$ajaxReturn['redirect'] = '/account/verify';
+					}
+					else {
+						$this->view->redirect('/account/verify');
+					}
 				}
 			}
+			else{
+				$ajaxReturn['status'] =  'ERROR';
+			}
 		}
-		if (!empty($_SERVER['HTTP_REFERER'])) {
-			$this->view->redirect($_SERVER['HTTP_REFERER']);
-		} else {
-			$this->view->redirect('/');
+		if (isset($_POST['actionType']) && $_POST['actionType'] == 'ajax'){
+			echo json_encode($ajaxReturn);
+		}
+		else {
+			if (!empty($_SERVER['HTTP_REFERER'])) {
+				$this->view->redirect($_SERVER['HTTP_REFERER']);
+			} else {
+				$this->view->redirect('/');
+			}
 		}
 	}
 

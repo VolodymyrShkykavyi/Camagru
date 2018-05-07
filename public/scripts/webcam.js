@@ -35,6 +35,10 @@ webcam.addEventListener('play', function () {
 function drawMain(img, context) {
     if (img && (img.src || isWebCam)) {
         context.drawImage(img, 0, 0, canvas.width, canvas.height);
+        if (!isCanvasBlank(canvas) && !isCanvasBlank(decoration)){
+            unblockUploadBtn();
+        }
+        canvas.parentElement.style.backgroundImage = 'none';
     }
     if (isWebCam) {
         setTimeout(drawMain, 10, img, context);

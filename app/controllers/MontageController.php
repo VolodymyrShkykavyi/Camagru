@@ -21,7 +21,7 @@ class MontageController extends Controller
 		if (AccountController::checkUserToken()) {
 			$this->model = $this->loadModel('Gallery');
 			$this->ViewData['thumbnails'] = $this->model->getUserImagesAll($_SESSION['authorization']['id']);
-			$decorations = glob('public/gallery/decorations/*.{png,jpeg,jpg}', GLOB_BRACE);
+			$decorations = glob('public/gallery/decorations/*.{png,jpeg,jpg,gif}', GLOB_BRACE);
 			foreach ($decorations as &$value){
 				$value = '/' . $value;
 			}
@@ -56,7 +56,7 @@ class MontageController extends Controller
 		$height = imagesy($destImg);
 
 		imagecopy($destImg, $srcImg, 0, 0, 0, 0, $width, $height);
-		header('Content-Type: image/gif');
+		imagedestroy($srcImg);
 		$path = '/public/gallery/' . time() . $_SESSION['authorization']['login'] . '.png';
 
 		//save image
@@ -69,6 +69,7 @@ class MontageController extends Controller
 				unlink(ROOT . $path);
 				echo 'ERROR';
 			}
+			imagedestroy($destImg);
 			echo json_encode(['id' => $id, 'src' => $path], JSON_UNESCAPED_SLASHES);
 		}
 		else{
