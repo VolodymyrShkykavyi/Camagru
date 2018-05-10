@@ -57,4 +57,4 @@ if (empty($db->query_fetched('SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMAT
 
 }
 
-header("Location: http://{$_SERVER['SERVER_NAME']}/index.php");
+header("Location: http://{$_SERVER['HTTP_HOST']}/index.php");

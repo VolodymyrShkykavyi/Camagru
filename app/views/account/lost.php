@@ -23,8 +23,13 @@ if (!isset($ViewData['result']) && isset($ViewData['token']) &&
 <?php elseif (isset($ViewData['result']) && $ViewData['result'] == 'ERROR'): ?>
     <span class="text-danger">Can't change password. Please try again</span>
 <?php else: ?>
-    <form method="post" action="/account/lost">
-        <input type="text" name="login" placeholder="Username">
-        <button type="submit" class="btn btn-primary" name="action" value="sendMail">Get reinitialization mail</button>
+    <form method="post" action="/account/lost" class="form-row  mt-3 mb-4">
+        <div class="col-12 mt-1">
+            <input type="text" name="login" placeholder="Username">
+        </div>
+        <div class="col-12 mt-1">
+            <button type="submit" class="btn btn-primary" name="action" value="sendMail">Get reinitialization mail
+            </button>
+        </div>
     </form>
 <?php endif; ?>

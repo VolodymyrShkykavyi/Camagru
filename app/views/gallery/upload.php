@@ -56,7 +56,6 @@ if (isset($ViewData) && isset($ViewData['errors'])) {
             </div>
             <?php
         }
-        //TODO: comment field
     }
     ?>
 </div>
